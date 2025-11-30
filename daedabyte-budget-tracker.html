@@ -764,6 +764,24 @@
                 </div>
                 <button class="btn" onclick="addPayment()">Record Payment</button>
             </div>
+
+            <div class="card">
+                <h3>Payment History</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">View and manage all project and support payments in one place</p>
+                <table id="paymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Expenses Tab -->
@@ -1000,6 +1018,7 @@
         let editingExpenseId = null;
         let editingSupportPlanId = null;
         let editingTaxPaymentId = null;
+        let editingPaymentId = null;
 
         // Toast Notification System
         function showToast(message, type = 'info') {
@@ -1038,6 +1057,7 @@
             updateProjectOptions();
             updateSupportPlanOptions();
             updateClientOptions();
+            updatePaymentsTable();
             updateDashboard();
             updateMRRMetrics();
         }
@@ -1371,6 +1391,7 @@
             saveData();
             updateProjectsTable();
             updateProjectOptions();
+            updatePaymentsTable();
             clearPaymentForm();
             updateDashboard();
             updateMRRMetrics();
@@ -1391,6 +1412,163 @@
             document.getElementById('paymentProject').value = '';
             document.getElementById('paymentAmount').value = '';
             document.getElementById('paymentDate').value = '';
+        }
+
+        // Payment History Management
+        function updatePaymentsTable() {
+            const tbody = document.querySelector('#paymentsTable tbody');
+            tbody.innerHTML = '';
+
+            // Sort payments by date (newest first)
+            const sortedPayments = [...payments].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedPayments.forEach(payment => {
+                const row = tbody.insertRow();
+                row.id = `payment-row-${payment.id}`;
+
+                // Determine payment type and details
+                let paymentType = '';
+                let details = '';
+
+                if (payment.type === 'support' || payment.supportPlanId) {
+                    paymentType = 'Support';
+                    const plan = supportPlans.find(p => p.id === payment.supportPlanId);
+                    if (plan) {
+                        details = `${getSupportPlanTypeLabel(plan.planType)}`;
+                        if (payment.paymentMonth) {
+                            details += ` - ${payment.paymentMonth}`;
+                        }
+                    } else {
+                        details = 'Plan deleted';
+                    }
+                } else {
+                    paymentType = 'Project';
+                    const project = projects.find(p => p.id === payment.projectId);
+                    if (project) {
+                        details = `${getProjectTypeLabel(project.projectType)}`;
+                    } else {
+                        details = 'Project deleted';
+                    }
+                }
+
+                row.innerHTML = `
+                    <td>${payment.date}</td>
+                    <td>${payment.clientName}</td>
+                    <td><span style="padding: 3px 8px; background: ${payment.type === 'support' ? '#17a2b8' : '#A678D1'}; color: white; border-radius: 3px; font-size: 0.85rem;">${paymentType}</span></td>
+                    <td>$${payment.amount.toFixed(2)}</td>
+                    <td>${details}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editPayment(${payment.id})">Edit</button>
+                        <button class="delete-btn" onclick="deletePayment(${payment.id})">Delete</button>
+                    </td>
+                `;
+            });
+
+            // Show message if no payments
+            if (payments.length === 0) {
+                const row = tbody.insertRow();
+                row.innerHTML = `<td colspan="6" style="text-align: center; color: #999; padding: 20px;">No payments recorded yet</td>`;
+            }
+        }
+
+        function editPayment(id) {
+            const payment = payments.find(p => p.id === id);
+            if (!payment) {
+                showToast('Payment not found!', 'error');
+                return;
+            }
+
+            // Scroll to the appropriate form based on payment type
+            if (payment.type === 'support' || payment.supportPlanId) {
+                // For support payments, we can't easily edit through the existing form
+                // So we'll show a custom dialog
+                const newAmount = prompt(`Edit support payment for ${payment.clientName}\n\nCurrent amount: $${payment.amount.toFixed(2)}\nEnter new amount:`, payment.amount);
+
+                if (newAmount !== null && newAmount !== '') {
+                    const amount = parseFloat(newAmount);
+                    if (isNaN(amount) || amount <= 0) {
+                        showToast('Invalid amount entered', 'error');
+                        return;
+                    }
+
+                    payment.amount = amount;
+                    saveData();
+                    updatePaymentsTable();
+                    updateDashboard();
+
+                    const row = document.getElementById(`payment-row-${id}`);
+                    if (row) row.classList.add('highlight-row');
+
+                    showToast(`Payment updated to $${amount.toFixed(2)}`, 'success');
+                }
+            } else {
+                // For project payments, we need to adjust the project's paidAmount
+                const project = projects.find(p => p.id === payment.projectId);
+                if (!project) {
+                    showToast('Associated project not found', 'error');
+                    return;
+                }
+
+                const oldAmount = payment.amount;
+                const newAmount = prompt(`Edit payment for ${payment.clientName}\n\nCurrent amount: $${oldAmount.toFixed(2)}\nProject total: $${project.totalAmount.toFixed(2)}\nCurrent paid: $${project.paidAmount.toFixed(2)}\n\nEnter new amount:`, oldAmount);
+
+                if (newAmount !== null && newAmount !== '') {
+                    const amount = parseFloat(newAmount);
+                    if (isNaN(amount) || amount <= 0) {
+                        showToast('Invalid amount entered', 'error');
+                        return;
+                    }
+
+                    // Calculate new paidAmount for project
+                    const newPaidAmount = project.paidAmount - oldAmount + amount;
+
+                    if (newPaidAmount > project.totalAmount) {
+                        showToast(`New total ($${newPaidAmount.toFixed(2)}) would exceed project total ($${project.totalAmount.toFixed(2)})`, 'error');
+                        return;
+                    }
+
+                    // Update payment and project
+                    payment.amount = amount;
+                    project.paidAmount = newPaidAmount;
+
+                    saveData();
+                    updatePaymentsTable();
+                    updateProjectsTable();
+                    updateDashboard();
+
+                    const row = document.getElementById(`payment-row-${id}`);
+                    if (row) row.classList.add('highlight-row');
+
+                    showToast(`Payment updated to $${amount.toFixed(2)}. Project paid: $${newPaidAmount.toFixed(2)}`, 'success');
+                }
+            }
+        }
+
+        function deletePayment(id) {
+            const payment = payments.find(p => p.id === id);
+            if (!payment) return;
+
+            const confirmMessage = `Are you sure you want to delete this payment?\n\nClient: ${payment.clientName}\nAmount: $${payment.amount.toFixed(2)}\nDate: ${payment.date}\n\nNote: This will adjust the paid balance accordingly.`;
+
+            if (confirm(confirmMessage)) {
+                // If it's a project payment, adjust the project's paidAmount
+                if (payment.projectId) {
+                    const project = projects.find(p => p.id === payment.projectId);
+                    if (project) {
+                        project.paidAmount -= payment.amount;
+                        updateProjectsTable();
+                        updateProjectOptions();
+                    }
+                }
+
+                // Remove the payment
+                payments = payments.filter(p => p.id !== id);
+                saveData();
+                updatePaymentsTable();
+                updateDashboard();
+
+                showToast(`Payment of $${payment.amount.toFixed(2)} for ${payment.clientName} deleted`, 'success');
+            }
         }
 
         // Support Plan Management
@@ -1637,6 +1815,7 @@
             payments.push(payment);
             saveData();
             clearSupportPaymentForm();
+            updatePaymentsTable();
             updateDashboard();
             updateMRRMetrics();
 
@@ -2006,6 +2185,7 @@
                 updateExpensesTable();
                 updateTaxPaymentsTable();
                 updateSupportPlansTable();
+                updatePaymentsTable();
                 updateSupportPlanOptions();
                 updateClientOptions();
                 updateMRRMetrics();
