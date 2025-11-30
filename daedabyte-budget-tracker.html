@@ -289,9 +289,148 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            min-width: 300px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid #A678D1;
+        }
+
+        .toast.success {
+            border-left-color: #28a745;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast.warning {
+            border-left-color: #ffc107;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .edit-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        .edit-btn:hover {
+            background: #138496;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s;
+            margin-left: 10px;
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            background: #5a6268;
+        }
+
+        .form-editing {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .highlight-row {
+            animation: highlightFade 2s ease;
+        }
+
+        @keyframes highlightFade {
+            0% { background: #fff3cd; }
+            100% { background: transparent; }
+        }
     </style>
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <div class="header">
         <h1>Daedabyte LLC</h1>
         <p>Budget & Financial Tracker</p>
@@ -428,8 +567,11 @@
                 </div>
             </div>
 
-            <div class="card">
-                <h3>Add New Support Plan</h3>
+            <div class="card" id="supportPlanFormCard">
+                <h3 id="supportPlanFormTitle">Add New Support Plan</h3>
+                <div id="supportPlanEditingIndicator" style="display: none;" class="form-editing">
+                    Editing support plan - Click Cancel to stop editing
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Client Name:</label>
@@ -481,7 +623,10 @@
                         <input type="date" id="supportEndDate">
                     </div>
                 </div>
-                <button class="btn" onclick="addSupportPlan()">Add Support Plan</button>
+                <div>
+                    <button class="btn" onclick="saveSupportPlan()" id="saveSupportPlanBtn">Add Support Plan</button>
+                    <button class="btn-cancel" onclick="cancelSupportPlanEdit()" id="cancelSupportPlanBtn" style="display: none;">Cancel</button>
+                </div>
             </div>
 
             <div class="card">
@@ -529,8 +674,11 @@
                 <button class="btn" onclick="addSupportPayment()">Record Support Payment</button>
             </div>
 
-            <div class="card">
-                <h3>Add New Project</h3>
+            <div class="card" id="projectFormCard">
+                <h3 id="projectFormTitle">Add New Project</h3>
+                <div id="projectEditingIndicator" style="display: none;" class="form-editing">
+                    Editing project - Click Cancel to stop editing
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Client Name:</label>
@@ -572,7 +720,10 @@
                         </select>
                     </div>
                 </div>
-                <button class="btn" onclick="addProject()">Add Project</button>
+                <div>
+                    <button class="btn" onclick="saveProject()" id="saveProjectBtn">Add Project</button>
+                    <button class="btn-cancel" onclick="cancelProjectEdit()" id="cancelProjectBtn" style="display: none;">Cancel</button>
+                </div>
             </div>
 
             <div class="card">
@@ -617,8 +768,11 @@
 
         <!-- Expenses Tab -->
         <div id="expenses" class="tab-content">
-            <div class="card">
-                <h3>Add New Expense</h3>
+            <div class="card" id="expenseFormCard">
+                <h3 id="expenseFormTitle">Add New Expense</h3>
+                <div id="expenseEditingIndicator" style="display: none;" class="form-editing">
+                    Editing expense - Click Cancel to stop editing
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Expense Description:</label>
@@ -661,7 +815,10 @@
                         </select>
                     </div>
                 </div>
-                <button class="btn" onclick="addExpense()">Add Expense</button>
+                <div>
+                    <button class="btn" onclick="saveExpense()" id="saveExpenseBtn">Add Expense</button>
+                    <button class="btn-cancel" onclick="cancelExpenseEdit()" id="cancelExpenseBtn" style="display: none;">Cancel</button>
+                </div>
             </div>
 
             <div class="card">
@@ -838,6 +995,42 @@
         let taxPayments = [];
         let supportPlans = [];
 
+        // Edit mode tracking
+        let editingProjectId = null;
+        let editingExpenseId = null;
+        let editingSupportPlanId = null;
+        let editingTaxPaymentId = null;
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
+
         // Initialize the application
         function init() {
             loadData();
@@ -855,17 +1048,22 @@
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-            
+
             // Remove active class from all tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
+
+            // Add active class to corresponding tab button
+            const tabButtons = document.querySelectorAll('.tab');
+            const tabNames = ['dashboard', 'projects', 'expenses', 'taxes', 'reports'];
+            const tabIndex = tabNames.indexOf(tabName);
+            if (tabIndex >= 0 && tabButtons[tabIndex]) {
+                tabButtons[tabIndex].classList.add('active');
+            }
 
             // Update dashboard when switching to it
             if (tabName === 'dashboard') {
@@ -924,8 +1122,8 @@
         }
 
         // Project management
-        function addProject() {
-            const clientName = document.getElementById('clientName').value;
+        function saveProject() {
+            const clientName = document.getElementById('clientName').value.trim();
             const projectType = document.getElementById('projectType').value;
             const totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
             const startDate = document.getElementById('projectStartDate').value;
@@ -933,28 +1131,106 @@
             const status = document.getElementById('projectStatus').value;
 
             if (!clientName || totalAmount <= 0) {
-                alert('Please fill in all required fields.');
+                showToast('Please fill in all required fields (Client Name and Total Amount)', 'error');
                 return;
             }
 
-            const project = {
-                id: Date.now(),
-                clientName,
-                projectType,
-                totalAmount,
-                startDate,
-                paymentSchedule,
-                status,
-                paidAmount: 0
-            };
+            if (editingProjectId !== null) {
+                // Update existing project
+                const project = projects.find(p => p.id === editingProjectId);
+                if (project) {
+                    project.clientName = clientName;
+                    project.projectType = projectType;
+                    project.totalAmount = totalAmount;
+                    project.startDate = startDate;
+                    project.paymentSchedule = paymentSchedule;
+                    project.status = status;
 
-            projects.push(project);
-            saveData();
-            updateProjectsTable();
-            updateProjectOptions();
-            updateClientOptions();
+                    saveData();
+                    updateProjectsTable();
+                    updateProjectOptions();
+                    updateClientOptions();
+                    updateDashboard();
+
+                    // Highlight the updated row
+                    const row = document.getElementById(`project-row-${editingProjectId}`);
+                    if (row) row.classList.add('highlight-row');
+
+                    showToast(`Project for ${clientName} updated successfully!`, 'success');
+                    cancelProjectEdit();
+                }
+            } else {
+                // Add new project
+                const project = {
+                    id: Date.now(),
+                    clientName,
+                    projectType,
+                    totalAmount,
+                    startDate,
+                    paymentSchedule,
+                    status,
+                    paidAmount: 0
+                };
+
+                projects.push(project);
+                saveData();
+                updateProjectsTable();
+                updateProjectOptions();
+                updateClientOptions();
+                updateDashboard();
+
+                // Highlight the new row
+                setTimeout(() => {
+                    const row = document.getElementById(`project-row-${project.id}`);
+                    if (row) row.classList.add('highlight-row');
+                }, 100);
+
+                showToast(`Project for ${clientName} added successfully!`, 'success');
+                clearProjectForm();
+            }
+        }
+
+        function editProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) {
+                showToast('Project not found!', 'error');
+                return;
+            }
+
+            // Set editing mode
+            editingProjectId = id;
+
+            // Populate form
+            document.getElementById('clientName').value = project.clientName;
+            document.getElementById('projectType').value = project.projectType;
+            document.getElementById('totalAmount').value = project.totalAmount;
+            document.getElementById('projectStartDate').value = project.startDate;
+            document.getElementById('paymentSchedule').value = project.paymentSchedule;
+            document.getElementById('projectStatus').value = project.status;
+
+            // Update UI
+            document.getElementById('projectFormTitle').textContent = 'Edit Project';
+            document.getElementById('projectEditingIndicator').style.display = 'block';
+            document.getElementById('saveProjectBtn').textContent = 'Update Project';
+            document.getElementById('cancelProjectBtn').style.display = 'inline-block';
+
+            // Scroll to form
+            document.getElementById('projectFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            showToast('Editing project - Make your changes and click Update', 'info');
+        }
+
+        function cancelProjectEdit() {
+            editingProjectId = null;
+
+            // Reset form
             clearProjectForm();
-            updateDashboard();
+
+            // Update UI
+            document.getElementById('projectFormTitle').textContent = 'Add New Project';
+            document.getElementById('projectEditingIndicator').style.display = 'none';
+            document.getElementById('saveProjectBtn').textContent = 'Add Project';
+            document.getElementById('cancelProjectBtn').style.display = 'none';
         }
 
         function updateProjectsTable() {
@@ -964,6 +1240,7 @@
             projects.forEach(project => {
                 const remaining = project.totalAmount - project.paidAmount;
                 const row = tbody.insertRow();
+                row.id = `project-row-${project.id}`;
                 row.innerHTML = `
                     <td>${project.clientName}</td>
                     <td>${getProjectTypeLabel(project.projectType)}</td>
@@ -971,7 +1248,10 @@
                     <td>$${project.paidAmount.toFixed(2)}</td>
                     <td>$${remaining.toFixed(2)}</td>
                     <td>${project.status}</td>
-                    <td><button class="delete-btn" onclick="deleteProject(${project.id})">Delete</button></td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editProject(${project.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteProject(${project.id})">Delete</button>
+                    </td>
                 `;
             });
         }
@@ -987,7 +1267,15 @@
         }
 
         function deleteProject(id) {
-            if (confirm('Are you sure you want to delete this project?')) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            const relatedPayments = payments.filter(p => p.projectId === id);
+            const confirmMessage = relatedPayments.length > 0
+                ? `Are you sure you want to delete this project for ${project.clientName}?\n\nThis will also delete ${relatedPayments.length} related payment(s).`
+                : `Are you sure you want to delete this project for ${project.clientName}?`;
+
+            if (confirm(confirmMessage)) {
                 projects = projects.filter(p => p.id !== id);
                 // Also remove related payments
                 payments = payments.filter(p => p.projectId !== id);
@@ -996,6 +1284,8 @@
                 updateProjectOptions();
                 updateClientOptions();
                 updateDashboard();
+
+                showToast(`Project for ${project.clientName} deleted successfully`, 'success');
             }
         }
 
@@ -1050,19 +1340,19 @@
             const date = document.getElementById('paymentDate').value;
 
             if (!projectId || !amount || !date) {
-                alert('Please fill in all payment fields.');
+                showToast('Please fill in all payment fields', 'error');
                 return;
             }
 
             const project = projects.find(p => p.id === projectId);
             if (!project) {
-                alert('Project not found.');
+                showToast('Project not found', 'error');
                 return;
             }
 
             const remaining = project.totalAmount - project.paidAmount;
             if (amount > remaining) {
-                alert(`Payment amount exceeds remaining balance of ${remaining.toFixed(2)}.`);
+                showToast(`Payment amount ($${amount.toFixed(2)}) exceeds remaining balance of $${remaining.toFixed(2)}`, 'error');
                 return;
             }
 
@@ -1084,6 +1374,17 @@
             clearPaymentForm();
             updateDashboard();
             updateMRRMetrics();
+
+            // Highlight the updated project row
+            const row = document.getElementById(`project-row-${projectId}`);
+            if (row) row.classList.add('highlight-row');
+
+            const newRemaining = remaining - amount;
+            if (newRemaining === 0) {
+                showToast(`Payment recorded! Project for ${project.clientName} is now fully paid! 🎉`, 'success');
+            } else {
+                showToast(`Payment of $${amount.toFixed(2)} recorded for ${project.clientName}. Remaining: $${newRemaining.toFixed(2)}`, 'success');
+            }
         }
 
         function clearPaymentForm() {
@@ -1093,44 +1394,137 @@
         }
 
         // Support Plan Management
-        function addSupportPlan() {
+        function saveSupportPlan() {
             const clientNameSelect = document.getElementById('supportClientName').value;
-            const clientNameNew = document.getElementById('supportClientNameNew').value;
+            const clientNameNew = document.getElementById('supportClientNameNew').value.trim();
             const clientName = clientNameSelect === '__new__' ? clientNameNew : clientNameSelect;
-            
+
             const planType = document.getElementById('supportPlanType').value;
             const monthlyAmount = parseFloat(document.getElementById('supportMonthlyAmount').value) || 0;
             const startDate = document.getElementById('supportStartDate').value;
             const billingDay = parseInt(document.getElementById('supportBillingDay').value) || 1;
             const status = document.getElementById('supportStatus').value;
-            const services = document.getElementById('supportServices').value;
+            const services = document.getElementById('supportServices').value.trim();
             const endDate = document.getElementById('supportEndDate').value;
 
             if (!clientName || monthlyAmount <= 0 || !startDate) {
-                alert('Please fill in all required fields.');
+                showToast('Please fill in all required fields (Client Name, Monthly Amount, and Start Date)', 'error');
                 return;
             }
 
-            const supportPlan = {
-                id: Date.now(),
-                clientName,
-                planType,
-                monthlyAmount,
-                startDate,
-                billingDay,
-                status,
-                services,
-                endDate
-            };
+            if (editingSupportPlanId !== null) {
+                // Update existing support plan
+                const supportPlan = supportPlans.find(p => p.id === editingSupportPlanId);
+                if (supportPlan) {
+                    supportPlan.clientName = clientName;
+                    supportPlan.planType = planType;
+                    supportPlan.monthlyAmount = monthlyAmount;
+                    supportPlan.startDate = startDate;
+                    supportPlan.billingDay = billingDay;
+                    supportPlan.status = status;
+                    supportPlan.services = services;
+                    supportPlan.endDate = endDate;
 
-            supportPlans.push(supportPlan);
-            saveData();
-            updateSupportPlansTable();
-            updateSupportPlanOptions();
-            updateClientOptions();
+                    saveData();
+                    updateSupportPlansTable();
+                    updateSupportPlanOptions();
+                    updateClientOptions();
+                    updateDashboard();
+                    updateMRRMetrics();
+
+                    // Highlight the updated row
+                    const row = document.getElementById(`support-plan-row-${editingSupportPlanId}`);
+                    if (row) row.classList.add('highlight-row');
+
+                    showToast(`Support plan for ${clientName} updated successfully!`, 'success');
+                    cancelSupportPlanEdit();
+                }
+            } else {
+                // Add new support plan
+                const supportPlan = {
+                    id: Date.now(),
+                    clientName,
+                    planType,
+                    monthlyAmount,
+                    startDate,
+                    billingDay,
+                    status,
+                    services,
+                    endDate
+                };
+
+                supportPlans.push(supportPlan);
+                saveData();
+                updateSupportPlansTable();
+                updateSupportPlanOptions();
+                updateClientOptions();
+                updateDashboard();
+                updateMRRMetrics();
+
+                // Highlight the new row
+                setTimeout(() => {
+                    const row = document.getElementById(`support-plan-row-${supportPlan.id}`);
+                    if (row) row.classList.add('highlight-row');
+                }, 100);
+
+                showToast(`Support plan for ${clientName} added successfully!`, 'success');
+                clearSupportPlanForm();
+            }
+        }
+
+        function editSupportPlan(id) {
+            const supportPlan = supportPlans.find(p => p.id === id);
+            if (!supportPlan) {
+                showToast('Support plan not found!', 'error');
+                return;
+            }
+
+            // Set editing mode
+            editingSupportPlanId = id;
+
+            // Populate form
+            const existingClient = Array.from(document.getElementById('supportClientName').options)
+                .some(option => option.value === supportPlan.clientName);
+
+            if (existingClient) {
+                document.getElementById('supportClientName').value = supportPlan.clientName;
+            } else {
+                document.getElementById('supportClientName').value = '__new__';
+                document.getElementById('supportClientNameNew').style.display = 'block';
+                document.getElementById('supportClientNameNew').value = supportPlan.clientName;
+            }
+
+            document.getElementById('supportPlanType').value = supportPlan.planType;
+            document.getElementById('supportMonthlyAmount').value = supportPlan.monthlyAmount;
+            document.getElementById('supportStartDate').value = supportPlan.startDate;
+            document.getElementById('supportBillingDay').value = supportPlan.billingDay;
+            document.getElementById('supportStatus').value = supportPlan.status;
+            document.getElementById('supportServices').value = supportPlan.services || '';
+            document.getElementById('supportEndDate').value = supportPlan.endDate || '';
+
+            // Update UI
+            document.getElementById('supportPlanFormTitle').textContent = 'Edit Support Plan';
+            document.getElementById('supportPlanEditingIndicator').style.display = 'block';
+            document.getElementById('saveSupportPlanBtn').textContent = 'Update Support Plan';
+            document.getElementById('cancelSupportPlanBtn').style.display = 'inline-block';
+
+            // Scroll to form
+            document.getElementById('supportPlanFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            showToast('Editing support plan - Make your changes and click Update', 'info');
+        }
+
+        function cancelSupportPlanEdit() {
+            editingSupportPlanId = null;
+
+            // Reset form
             clearSupportPlanForm();
-            updateDashboard();
-            updateMRRMetrics();
+
+            // Update UI
+            document.getElementById('supportPlanFormTitle').textContent = 'Add New Support Plan';
+            document.getElementById('supportPlanEditingIndicator').style.display = 'none';
+            document.getElementById('saveSupportPlanBtn').textContent = 'Add Support Plan';
+            document.getElementById('cancelSupportPlanBtn').style.display = 'none';
         }
 
         function updateSupportPlansTable() {
@@ -1139,14 +1533,18 @@
 
             supportPlans.forEach(plan => {
                 const row = tbody.insertRow();
+                row.id = `support-plan-row-${plan.id}`;
                 row.innerHTML = `
                     <td>${plan.clientName}</td>
                     <td>${getSupportPlanTypeLabel(plan.planType)}</td>
-                    <td>${plan.monthlyAmount.toFixed(2)}</td>
+                    <td>$${plan.monthlyAmount.toFixed(2)}</td>
                     <td>${plan.billingDay}</td>
                     <td>${plan.startDate}</td>
                     <td><span style="color: ${plan.status === 'active' ? '#28a745' : plan.status === 'paused' ? '#ffc107' : '#dc3545'};">${plan.status.toUpperCase()}</span></td>
-                    <td><button class="delete-btn" onclick="deleteSupportPlan(${plan.id})">Delete</button></td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editSupportPlan(${plan.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteSupportPlan(${plan.id})">Delete</button>
+                    </td>
                 `;
             });
         }
@@ -1163,7 +1561,15 @@
         }
 
         function deleteSupportPlan(id) {
-            if (confirm('Are you sure you want to delete this support plan? This will also remove all related payments.')) {
+            const supportPlan = supportPlans.find(p => p.id === id);
+            if (!supportPlan) return;
+
+            const relatedPayments = payments.filter(p => p.type === 'support' && p.supportPlanId === id);
+            const confirmMessage = relatedPayments.length > 0
+                ? `Are you sure you want to delete the support plan for ${supportPlan.clientName}?\n\nThis will also delete ${relatedPayments.length} related payment(s).`
+                : `Are you sure you want to delete the support plan for ${supportPlan.clientName}?`;
+
+            if (confirm(confirmMessage)) {
                 supportPlans = supportPlans.filter(p => p.id !== id);
                 // Also remove related support payments
                 payments = payments.filter(p => !(p.type === 'support' && p.supportPlanId === id));
@@ -1173,6 +1579,8 @@
                 updateClientOptions();
                 updateDashboard();
                 updateMRRMetrics();
+
+                showToast(`Support plan for ${supportPlan.clientName} deleted successfully`, 'success');
             }
         }
 
@@ -1206,13 +1614,13 @@
             const paymentMonth = document.getElementById('supportPaymentMonth').value;
 
             if (!supportPlanId || !amount || !date) {
-                alert('Please fill in all required fields.');
+                showToast('Please fill in all required fields', 'error');
                 return;
             }
 
             const supportPlan = supportPlans.find(p => p.id === supportPlanId);
             if (!supportPlan) {
-                alert('Support plan not found.');
+                showToast('Support plan not found', 'error');
                 return;
             }
 
@@ -1231,6 +1639,13 @@
             clearSupportPaymentForm();
             updateDashboard();
             updateMRRMetrics();
+
+            // Highlight the support plan row
+            const row = document.getElementById(`support-plan-row-${supportPlanId}`);
+            if (row) row.classList.add('highlight-row');
+
+            const monthText = paymentMonth ? ` for ${paymentMonth}` : '';
+            showToast(`Support payment of $${amount.toFixed(2)} recorded for ${supportPlan.clientName}${monthText}`, 'success');
         }
 
         function clearSupportPaymentForm() {
@@ -1253,34 +1668,111 @@
         }
 
         // Expense management
-        function addExpense() {
-            const description = document.getElementById('expenseDescription').value;
+        function saveExpense() {
+            const description = document.getElementById('expenseDescription').value.trim();
             const amount = parseFloat(document.getElementById('expenseAmount').value);
             const date = document.getElementById('expenseDate').value;
             const category = document.getElementById('expenseCategory').value;
-            const vendor = document.getElementById('expenseVendor').value;
+            const vendor = document.getElementById('expenseVendor').value.trim();
             const recurring = document.getElementById('expenseRecurring').value;
 
             if (!description || !amount || !date) {
-                alert('Please fill in all required expense fields.');
+                showToast('Please fill in all required fields (Description, Amount, and Date)', 'error');
                 return;
             }
 
-            const expense = {
-                id: Date.now(),
-                description,
-                amount,
-                date,
-                category,
-                vendor,
-                recurring
-            };
+            if (editingExpenseId !== null) {
+                // Update existing expense
+                const expense = expenses.find(e => e.id === editingExpenseId);
+                if (expense) {
+                    expense.description = description;
+                    expense.amount = amount;
+                    expense.date = date;
+                    expense.category = category;
+                    expense.vendor = vendor;
+                    expense.recurring = recurring;
 
-            expenses.push(expense);
-            saveData();
-            updateExpensesTable();
+                    saveData();
+                    updateExpensesTable();
+                    updateDashboard();
+
+                    // Highlight the updated row
+                    const row = document.getElementById(`expense-row-${editingExpenseId}`);
+                    if (row) row.classList.add('highlight-row');
+
+                    showToast(`Expense "${description}" updated successfully!`, 'success');
+                    cancelExpenseEdit();
+                }
+            } else {
+                // Add new expense
+                const expense = {
+                    id: Date.now(),
+                    description,
+                    amount,
+                    date,
+                    category,
+                    vendor,
+                    recurring
+                };
+
+                expenses.push(expense);
+                saveData();
+                updateExpensesTable();
+                updateDashboard();
+
+                // Highlight the new row
+                setTimeout(() => {
+                    const row = document.getElementById(`expense-row-${expense.id}`);
+                    if (row) row.classList.add('highlight-row');
+                }, 100);
+
+                showToast(`Expense "${description}" added successfully!`, 'success');
+                clearExpenseForm();
+            }
+        }
+
+        function editExpense(id) {
+            const expense = expenses.find(e => e.id === id);
+            if (!expense) {
+                showToast('Expense not found!', 'error');
+                return;
+            }
+
+            // Set editing mode
+            editingExpenseId = id;
+
+            // Populate form
+            document.getElementById('expenseDescription').value = expense.description;
+            document.getElementById('expenseAmount').value = expense.amount;
+            document.getElementById('expenseDate').value = expense.date;
+            document.getElementById('expenseCategory').value = expense.category;
+            document.getElementById('expenseVendor').value = expense.vendor;
+            document.getElementById('expenseRecurring').value = expense.recurring;
+
+            // Update UI
+            document.getElementById('expenseFormTitle').textContent = 'Edit Expense';
+            document.getElementById('expenseEditingIndicator').style.display = 'block';
+            document.getElementById('saveExpenseBtn').textContent = 'Update Expense';
+            document.getElementById('cancelExpenseBtn').style.display = 'inline-block';
+
+            // Switch to expenses tab and scroll to form
+            showTab('expenses');
+            document.getElementById('expenseFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            showToast('Editing expense - Make your changes and click Update', 'info');
+        }
+
+        function cancelExpenseEdit() {
+            editingExpenseId = null;
+
+            // Reset form
             clearExpenseForm();
-            updateDashboard();
+
+            // Update UI
+            document.getElementById('expenseFormTitle').textContent = 'Add New Expense';
+            document.getElementById('expenseEditingIndicator').style.display = 'none';
+            document.getElementById('saveExpenseBtn').textContent = 'Add Expense';
+            document.getElementById('cancelExpenseBtn').style.display = 'none';
         }
 
         function updateExpensesTable() {
@@ -1289,24 +1781,33 @@
 
             expenses.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(expense => {
                 const row = tbody.insertRow();
+                row.id = `expense-row-${expense.id}`;
                 row.innerHTML = `
                     <td>${expense.date}</td>
                     <td>${expense.description}</td>
-                    <td>${expense.vendor}</td>
+                    <td>${expense.vendor || 'N/A'}</td>
                     <td>${expense.category}</td>
                     <td>$${expense.amount.toFixed(2)}</td>
                     <td>${expense.recurring}</td>
-                    <td><button class="delete-btn" onclick="deleteExpense(${expense.id})">Delete</button></td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editExpense(${expense.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteExpense(${expense.id})">Delete</button>
+                    </td>
                 `;
             });
         }
 
         function deleteExpense(id) {
-            if (confirm('Are you sure you want to delete this expense?')) {
+            const expense = expenses.find(e => e.id === id);
+            if (!expense) return;
+
+            if (confirm(`Are you sure you want to delete the expense "${expense.description}" for $${expense.amount.toFixed(2)}?`)) {
                 expenses = expenses.filter(e => e.id !== id);
                 saveData();
                 updateExpensesTable();
                 updateDashboard();
+
+                showToast(`Expense "${expense.description}" deleted successfully`, 'success');
             }
         }
 
@@ -1324,7 +1825,7 @@
             const date = document.getElementById('quarterlyPaymentDate').value;
 
             if (!quarter || !amount || !date) {
-                alert('Please fill in all tax payment fields.');
+                showToast('Please fill in all tax payment fields', 'error');
                 return;
             }
 
@@ -1339,6 +1840,14 @@
             saveData();
             updateTaxPaymentsTable();
             clearTaxPaymentForm();
+
+            // Highlight the new row
+            setTimeout(() => {
+                const row = document.getElementById(`tax-payment-row-${payment.id}`);
+                if (row) row.classList.add('highlight-row');
+            }, 100);
+
+            showToast(`${quarter} tax payment of $${amount.toFixed(2)} recorded successfully!`, 'success');
         }
 
         function updateTaxPaymentsTable() {
@@ -1347,6 +1856,7 @@
 
             taxPayments.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(payment => {
                 const row = tbody.insertRow();
+                row.id = `tax-payment-row-${payment.id}`;
                 row.innerHTML = `
                     <td>${payment.quarter}</td>
                     <td>${payment.date}</td>
@@ -1357,10 +1867,15 @@
         }
 
         function deleteTaxPayment(id) {
-            if (confirm('Are you sure you want to delete this tax payment?')) {
+            const payment = taxPayments.find(p => p.id === id);
+            if (!payment) return;
+
+            if (confirm(`Are you sure you want to delete the ${payment.quarter} tax payment of $${payment.amount.toFixed(2)}?`)) {
                 taxPayments = taxPayments.filter(p => p.id !== id);
                 saveData();
                 updateTaxPaymentsTable();
+
+                showToast(`${payment.quarter} tax payment deleted successfully`, 'success');
             }
         }
 
