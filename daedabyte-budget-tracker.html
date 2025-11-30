@@ -981,7 +981,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Report Period:</label>
-                        <select id="reportPeriod">
+                        <select id="reportPeriod" onchange="toggleCustomReportDates()">
                             <option value="thisMonth">This Month</option>
                             <option value="lastMonth">Last Month</option>
                             <option value="thisQuarter">This Quarter</option>
@@ -990,6 +990,21 @@
                             <option value="custom">Custom Range</option>
                         </select>
                     </div>
+                </div>
+
+                <!-- Custom Date Range Pickers (hidden by default) -->
+                <div id="customReportDates" class="form-row" style="display: none; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 2px solid #A678D1;">
+                    <div class="form-group">
+                        <label>From Date:</label>
+                        <input type="date" id="reportFromDate">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date:</label>
+                        <input type="date" id="reportToDate">
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 15px;">
                     <div class="form-group">
                         <button class="btn" onclick="generateCoOwnerReport()">📋 Generate Financial Report</button>
                     </div>
@@ -2068,10 +2083,14 @@
             const fromDate = new Date(document.getElementById('fromDate').value);
             const toDate = new Date(document.getElementById('toDate').value);
 
+            // Ensure toDate includes the entire day
+            const endOfDay = new Date(toDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
             // Calculate revenue in date range - separate project and support revenue
             const filteredPayments = payments.filter(p => {
                 const paymentDate = new Date(p.date);
-                return paymentDate >= fromDate && paymentDate <= toDate;
+                return paymentDate >= fromDate && paymentDate <= endOfDay;
             });
 
             const projectPayments = filteredPayments.filter(p => p.type === 'project' || !p.type);
@@ -2084,7 +2103,7 @@
             // Calculate expenses in date range
             const filteredExpenses = expenses.filter(e => {
                 const expenseDate = new Date(e.date);
-                return expenseDate >= fromDate && expenseDate <= toDate;
+                return expenseDate >= fromDate && expenseDate <= endOfDay;
             });
 
             const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
@@ -2427,12 +2446,34 @@
             showExportStatus(`✅ ${type.charAt(0).toUpperCase() + type.slice(1)} exported to CSV successfully!`, 'success');
         }
 
+        // Toggle custom date pickers for reports
+        function toggleCustomReportDates() {
+            const reportPeriod = document.getElementById('reportPeriod').value;
+            const customDatesDiv = document.getElementById('customReportDates');
+
+            if (reportPeriod === 'custom') {
+                customDatesDiv.style.display = 'grid';
+
+                // Set default dates if not already set
+                if (!document.getElementById('reportFromDate').value) {
+                    const now = new Date();
+                    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+                    document.getElementById('reportFromDate').value = firstDay.toISOString().split('T')[0];
+                    document.getElementById('reportToDate').value = lastDay.toISOString().split('T')[0];
+                }
+            } else {
+                customDatesDiv.style.display = 'none';
+            }
+        }
+
         function generateCoOwnerReport() {
             const reportPeriod = document.getElementById('reportPeriod').value;
             let fromDate, toDate, periodLabel;
-            
+
             const now = new Date();
-            
+
             switch (reportPeriod) {
                 case 'thisMonth':
                     fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -2463,21 +2504,45 @@
                     toDate = now;
                     periodLabel = `Year to Date ${now.getFullYear()}`;
                     break;
-                default:
-                    fromDate = new Date(document.getElementById('fromDate').value);
-                    toDate = new Date(document.getElementById('toDate').value);
+                case 'custom':
+                    const reportFromDateValue = document.getElementById('reportFromDate').value;
+                    const reportToDateValue = document.getElementById('reportToDate').value;
+
+                    if (!reportFromDateValue || !reportToDateValue) {
+                        showToast('Please select both From Date and To Date for custom range', 'error');
+                        return;
+                    }
+
+                    fromDate = new Date(reportFromDateValue);
+                    toDate = new Date(reportToDateValue);
+
+                    if (fromDate > toDate) {
+                        showToast('From Date must be before To Date', 'error');
+                        return;
+                    }
+
                     periodLabel = `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
+                    break;
+                default:
+                    // Fallback to current month
+                    fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    periodLabel = `${fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
             }
             
+            // Ensure toDate includes the entire day by setting time to end of day
+            const endOfDay = new Date(toDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
             // Calculate financial data for the period
             const filteredPayments = payments.filter(p => {
                 const paymentDate = new Date(p.date);
-                return paymentDate >= fromDate && paymentDate <= toDate;
+                return paymentDate >= fromDate && paymentDate <= endOfDay;
             });
-            
+
             const filteredExpenses = expenses.filter(e => {
                 const expenseDate = new Date(e.date);
-                return expenseDate >= fromDate && expenseDate <= toDate;
+                return expenseDate >= fromDate && expenseDate <= endOfDay;
             });
 
             // Separate project and support revenue
