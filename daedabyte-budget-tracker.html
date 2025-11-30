@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daedabyte LLC - Budget Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #F5F5F0 0%, #C3B86A 100%);
+            min-height: 100vh;
+            color: #414141;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #A678D1 0%, #FC7645 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .tabs-container {
+            background: white;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #F5F5F0;
+            border-bottom: 2px solid #C3B86A;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #414141;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            background: linear-gradient(135deg, #A678D1, #FC7645);
+            color: white;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #A678D1, #FC7645);
+            color: white;
+            border-bottom-color: #FC7645;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #A678D1;
+        }
+        
+        .card h3 {
+            color: #A678D1;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #1D8A99, #A678D1);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-card h4 {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .metric-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #414141;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #F5F5F0;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #A678D1;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #A678D1, #FC7645);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #1D8A99;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #F5F5F0;
+        }
+        
+        th {
+            background: #F5F5F0;
+            font-weight: 600;
+            color: #414141;
+        }
+        
+        tr:hover {
+            background: #F5F5F0;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .date-range {
+            display: flex;
+            gap: 15px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+        
+        .distributions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .member-card {
+            background: linear-gradient(135deg, #A678D1, #1D8A99);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .member-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .member-card .percentage {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .member-card .amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .header, .tabs, .tab-content:not(.active) {
+                display: none !important;
+            }
+            
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .metric-card, .member-card {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+
+        .export-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .export-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .export-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Daedabyte LLC</h1>
+        <p>Budget & Financial Tracker</p>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab" onclick="showTab('projects')">Projects & Revenue</button>
+            <button class="tab" onclick="showTab('expenses')">Expenses</button>
+            <button class="tab" onclick="showTab('taxes')">Tax Planning</button>
+            <button class="tab" onclick="showTab('reports')">Reports & Export</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <h3>Financial Overview</h3>
+                <div class="date-range">
+                    <div class="form-group">
+                        <label>From Date:</label>
+                        <input type="date" id="fromDate" onchange="updateDashboard()">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date:</label>
+                        <input type="date" id="toDate" onchange="updateDashboard()">
+                    </div>
+                    <div class="form-group">
+                        <label>Quick Select:</label>
+                        <select id="quickSelect" onchange="setQuickDate()">
+                            <option value="">Custom Range</option>
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                            <option value="thisQuarter">This Quarter</option>
+                            <option value="lastQuarter">Last Quarter</option>
+                            <option value="ytd">Year to Date</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Project Revenue</h4>
+                    <div class="value" id="totalProjectRevenue">$0</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Support Revenue</h4>
+                    <div class="value" id="totalSupportRevenue">$0</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Total Revenue</h4>
+                    <div class="value" id="totalRevenue">$0</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Total Expenses</h4>
+                    <div class="value" id="totalExpenses">$0</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Net Profit</h4>
+                    <div class="value" id="netProfit">$0</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Available for Distribution</h4>
+                    <div class="value" id="distributionPool">$0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Member Distributions (40% of Net Profit)</h3>
+                <div class="distributions">
+                    <div class="member-card">
+                        <h4>Jonathan Bartholomew</h4>
+                        <div class="percentage">35% Share</div>
+                        <div class="amount" id="jonDistribution">$0</div>
+                    </div>
+                    <div class="member-card">
+                        <h4>Alejandro Marquez Grande</h4>
+                        <div class="percentage">33% Share</div>
+                        <div class="amount" id="alexDistribution">$0</div>
+                    </div>
+                    <div class="member-card">
+                        <h4>Joseph Konkle</h4>
+                        <div class="percentage">32% Share</div>
+                        <div class="amount" id="joeDistribution">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Tax Summary</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h4>Estimated Federal Tax</h4>
+                        <div class="value" id="federalTax">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Virginia State Tax</h4>
+                        <div class="value" id="stateTax">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Self-Employment Tax</h4>
+                        <div class="value" id="selfEmploymentTax">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Business Reserve (60%)</h4>
+                        <div class="value" id="businessReserve">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects & Revenue Tab -->
+        <div id="projects" class="tab-content">
+            <div class="card">
+                <h3>Monthly Recurring Revenue Overview</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h4>Active Support Plans</h4>
+                        <div class="value" id="activeSupportPlans">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Monthly Recurring Revenue</h4>
+                        <div class="value" id="monthlyRecurringRevenue">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Annual Recurring Revenue</h4>
+                        <div class="value" id="annualRecurringRevenue">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Average Plan Value</h4>
+                        <div class="value" id="averagePlanValue">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Add New Support Plan</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Client Name:</label>
+                        <select id="supportClientName">
+                            <option value="">Select existing client or add new...</option>
+                        </select>
+                        <input type="text" id="supportClientNameNew" placeholder="Or enter new client name" style="margin-top: 5px; display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label>Plan Type:</label>
+                        <select id="supportPlanType">
+                            <option value="basic">Basic Support - $50/month</option>
+                            <option value="standard">Standard Support - $100/month</option>
+                            <option value="premium">Premium Support - $200/month</option>
+                            <option value="enterprise">Enterprise Support - $350/month</option>
+                            <option value="custom">Custom Amount</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Amount:</label>
+                        <input type="number" id="supportMonthlyAmount" step="0.01">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date:</label>
+                        <input type="date" id="supportStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Date (Day of Month):</label>
+                        <input type="number" id="supportBillingDay" min="1" max="31" placeholder="e.g. 15">
+                    </div>
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <select id="supportStatus">
+                            <option value="active">Active</option>
+                            <option value="paused">Paused</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Services Included:</label>
+                        <input type="text" id="supportServices" placeholder="e.g. Updates, backups, monitoring">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date (optional):</label>
+                        <input type="date" id="supportEndDate">
+                    </div>
+                </div>
+                <button class="btn" onclick="addSupportPlan()">Add Support Plan</button>
+            </div>
+
+            <div class="card">
+                <h3>Support Plans Overview</h3>
+                <table id="supportPlansTable">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Plan Type</th>
+                            <th>Monthly Amount</th>
+                            <th>Billing Day</th>
+                            <th>Start Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Record Support Payment</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Support Plan:</label>
+                        <select id="supportPaymentPlan">
+                            <option value="">Select a support plan...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Amount:</label>
+                        <input type="number" id="supportPaymentAmount" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Date:</label>
+                        <input type="date" id="supportPaymentDate">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Payment For Month:</label>
+                        <input type="month" id="supportPaymentMonth">
+                    </div>
+                </div>
+                <button class="btn" onclick="addSupportPayment()">Record Support Payment</button>
+            </div>
+
+            <div class="card">
+                <h3>Add New Project</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Client Name:</label>
+                        <input type="text" id="clientName">
+                    </div>
+                    <div class="form-group">
+                        <label>Project Type:</label>
+                        <select id="projectType">
+                            <option value="basic">Basic Package - $750</option>
+                            <option value="standard">Standard Package - $2,000</option>
+                            <option value="premium">Premium Package - $3,000+</option>
+                            <option value="custom">Custom Amount</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Amount:</label>
+                        <input type="number" id="totalAmount" step="0.01">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Start Date:</label>
+                        <input type="date" id="projectStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Schedule:</label>
+                        <select id="paymentSchedule">
+                            <option value="full">Full Payment</option>
+                            <option value="2payments">2 Payments</option>
+                            <option value="3payments">3 Payments</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Project Status:</label>
+                        <select id="projectStatus">
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="on-hold">On Hold</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="addProject()">Add Project</button>
+            </div>
+
+            <div class="card">
+                <h3>Projects Overview</h3>
+                <table id="projectsTable">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Type</th>
+                            <th>Total Amount</th>
+                            <th>Paid</th>
+                            <th>Remaining</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Record Payment</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Project:</label>
+                        <select id="paymentProject">
+                            <option value="">Select a project...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Amount:</label>
+                        <input type="number" id="paymentAmount" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Date:</label>
+                        <input type="date" id="paymentDate">
+                    </div>
+                </div>
+                <button class="btn" onclick="addPayment()">Record Payment</button>
+            </div>
+        </div>
+
+        <!-- Expenses Tab -->
+        <div id="expenses" class="tab-content">
+            <div class="card">
+                <h3>Add New Expense</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expense Description:</label>
+                        <input type="text" id="expenseDescription">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount:</label>
+                        <input type="number" id="expenseAmount" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Date:</label>
+                        <input type="date" id="expenseDate">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="expenseCategory">
+                            <option value="software">Software/SaaS</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="equipment">Equipment</option>
+                            <option value="office">Office Supplies</option>
+                            <option value="professional">Professional Services</option>
+                            <option value="travel">Travel</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor:</label>
+                        <input type="text" id="expenseVendor">
+                    </div>
+                    <div class="form-group">
+                        <label>Recurring:</label>
+                        <select id="expenseRecurring">
+                            <option value="no">One-time</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="addExpense()">Add Expense</button>
+            </div>
+
+            <div class="card">
+                <h3>Expenses Summary</h3>
+                <table id="expensesTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Vendor</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Recurring</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tax Planning Tab -->
+        <div id="taxes" class="tab-content">
+            <div class="card">
+                <h3>Tax Rate Settings</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Federal Tax Rate (%):</label>
+                        <input type="number" id="federalTaxRate" value="22" step="0.1" onchange="updateTaxCalculations()">
+                    </div>
+                    <div class="form-group">
+                        <label>Virginia State Tax Rate (%):</label>
+                        <input type="number" id="stateTaxRate" value="5.75" step="0.1" onchange="updateTaxCalculations()">
+                    </div>
+                    <div class="form-group">
+                        <label>Self-Employment Tax Rate (%):</label>
+                        <input type="number" id="selfEmploymentTaxRate" value="15.3" step="0.1" onchange="updateTaxCalculations()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Quarterly Estimated Payments</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quarter:</label>
+                        <select id="taxQuarter">
+                            <option value="Q1">Q1 (Jan-Mar) - Due April 15</option>
+                            <option value="Q2">Q2 (Apr-Jun) - Due June 15</option>
+                            <option value="Q3">Q3 (Jul-Sep) - Due September 15</option>
+                            <option value="Q4">Q4 (Oct-Dec) - Due January 15</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Amount:</label>
+                        <input type="number" id="quarterlyPaymentAmount" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Date:</label>
+                        <input type="date" id="quarterlyPaymentDate">
+                    </div>
+                </div>
+                <button class="btn" onclick="addQuarterlyPayment()">Record Quarterly Payment</button>
+            </div>
+
+            <div class="card">
+                <h3>Tax Payment History</h3>
+                <table id="taxPaymentsTable">
+                    <thead>
+                        <tr>
+                            <th>Quarter</th>
+                            <th>Payment Date</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Annual Tax Projection</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h4>Projected Annual Revenue</h4>
+                        <div class="value" id="projectedRevenue">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Projected Annual Expenses</h4>
+                        <div class="value" id="projectedExpenses">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Projected Net Profit</h4>
+                        <div class="value" id="projectedProfit">$0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Estimated Total Tax Liability</h4>
+                        <div class="value" id="totalTaxLiability">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports & Export Tab -->
+        <div id="reports" class="tab-content">
+            <div class="card">
+                <h3>Data Management</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button class="btn" onclick="exportAllData()">📥 Export All Data (JSON)</button>
+                        <p style="font-size: 0.9rem; margin-top: 5px; color: #666;">Save complete backup of all projects, expenses, and payments</p>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importAllData()">
+                        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Import Data (JSON)</button>
+                        <p style="font-size: 0.9rem; margin-top: 5px; color: #666;">Restore from previously saved backup</p>
+                    </div>
+                </div>
+                <div id="exportStatus" class="export-status"></div>
+            </div>
+
+            <div class="card">
+                <h3>Export Individual Reports</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button class="btn" onclick="exportCSV('projects')">📊 Export Projects (CSV)</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" onclick="exportCSV('expenses')">📊 Export Expenses (CSV)</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" onclick="exportCSV('payments')">📊 Export Payments (CSV)</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" onclick="exportCSV('supportPlans')">📊 Export Support Plans (CSV)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Generate Co-Owner Report</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Report Period:</label>
+                        <select id="reportPeriod">
+                            <option value="thisMonth">This Month</option>
+                            <option value="lastMonth">Last Month</option>
+                            <option value="thisQuarter">This Quarter</option>
+                            <option value="lastQuarter">Last Quarter</option>
+                            <option value="ytd">Year to Date</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" onclick="generateCoOwnerReport()">📋 Generate Financial Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" onclick="printReport()">🖨️ Print Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="coOwnerReport" class="card" style="display: none;">
+                <div id="reportContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let projects = [];
+        let expenses = [];
+        let payments = [];
+        let taxPayments = [];
+        let supportPlans = [];
+
+        // Initialize the application
+        function init() {
+            loadData();
+            setDefaultDates();
+            updateProjectOptions();
+            updateSupportPlanOptions();
+            updateClientOptions();
+            updateDashboard();
+            updateMRRMetrics();
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Update dashboard when switching to it
+            if (tabName === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        // Set default dates (current month)
+        function setDefaultDates() {
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            
+            document.getElementById('fromDate').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('toDate').value = lastDay.toISOString().split('T')[0];
+        }
+
+        // Quick date selection
+        function setQuickDate() {
+            const quickSelect = document.getElementById('quickSelect').value;
+            const now = new Date();
+            let fromDate, toDate;
+
+            switch (quickSelect) {
+                case 'thisMonth':
+                    fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    break;
+                case 'lastMonth':
+                    fromDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    toDate = new Date(now.getFullYear(), now.getMonth(), 0);
+                    break;
+                case 'thisQuarter':
+                    const quarter = Math.floor(now.getMonth() / 3);
+                    fromDate = new Date(now.getFullYear(), quarter * 3, 1);
+                    toDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
+                    break;
+                case 'lastQuarter':
+                    const lastQuarter = Math.floor(now.getMonth() / 3) - 1;
+                    const year = lastQuarter < 0 ? now.getFullYear() - 1 : now.getFullYear();
+                    const q = lastQuarter < 0 ? 3 : lastQuarter;
+                    fromDate = new Date(year, q * 3, 1);
+                    toDate = new Date(year, (q + 1) * 3, 0);
+                    break;
+                case 'ytd':
+                    fromDate = new Date(now.getFullYear(), 0, 1);
+                    toDate = now;
+                    break;
+                default:
+                    return;
+            }
+
+            document.getElementById('fromDate').value = fromDate.toISOString().split('T')[0];
+            document.getElementById('toDate').value = toDate.toISOString().split('T')[0];
+            updateDashboard();
+        }
+
+        // Project management
+        function addProject() {
+            const clientName = document.getElementById('clientName').value;
+            const projectType = document.getElementById('projectType').value;
+            const totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
+            const startDate = document.getElementById('projectStartDate').value;
+            const paymentSchedule = document.getElementById('paymentSchedule').value;
+            const status = document.getElementById('projectStatus').value;
+
+            if (!clientName || totalAmount <= 0) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const project = {
+                id: Date.now(),
+                clientName,
+                projectType,
+                totalAmount,
+                startDate,
+                paymentSchedule,
+                status,
+                paidAmount: 0
+            };
+
+            projects.push(project);
+            saveData();
+            updateProjectsTable();
+            updateProjectOptions();
+            updateClientOptions();
+            clearProjectForm();
+            updateDashboard();
+        }
+
+        function updateProjectsTable() {
+            const tbody = document.querySelector('#projectsTable tbody');
+            tbody.innerHTML = '';
+
+            projects.forEach(project => {
+                const remaining = project.totalAmount - project.paidAmount;
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${project.clientName}</td>
+                    <td>${getProjectTypeLabel(project.projectType)}</td>
+                    <td>$${project.totalAmount.toFixed(2)}</td>
+                    <td>$${project.paidAmount.toFixed(2)}</td>
+                    <td>$${remaining.toFixed(2)}</td>
+                    <td>${project.status}</td>
+                    <td><button class="delete-btn" onclick="deleteProject(${project.id})">Delete</button></td>
+                `;
+            });
+        }
+
+        function getProjectTypeLabel(type) {
+            const labels = {
+                'basic': 'Basic ($750)',
+                'standard': 'Standard ($2,000)',
+                'premium': 'Premium ($3,000+)',
+                'custom': 'Custom'
+            };
+            return labels[type] || type;
+        }
+
+        function deleteProject(id) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                projects = projects.filter(p => p.id !== id);
+                // Also remove related payments
+                payments = payments.filter(p => p.projectId !== id);
+                saveData();
+                updateProjectsTable();
+                updateProjectOptions();
+                updateClientOptions();
+                updateDashboard();
+            }
+        }
+
+        function clearProjectForm() {
+            document.getElementById('clientName').value = '';
+            document.getElementById('totalAmount').value = '';
+            document.getElementById('projectStartDate').value = '';
+        }
+
+        function updateProjectOptions() {
+            const select = document.getElementById('paymentProject');
+            select.innerHTML = '<option value="">Select a project...</option>';
+            
+            projects.forEach(project => {
+                const remaining = project.totalAmount - project.paidAmount;
+                if (remaining > 0) {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = `${project.clientName} - ${remaining.toFixed(2)} remaining`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function updateClientOptions() {
+            // Get all unique client names from projects and support plans
+            const allClients = new Set();
+            projects.forEach(project => allClients.add(project.clientName));
+            supportPlans.forEach(plan => allClients.add(plan.clientName));
+            
+            const clientNames = Array.from(allClients).sort();
+            
+            // Update support plan client dropdown
+            const supportClientSelect = document.getElementById('supportClientName');
+            supportClientSelect.innerHTML = '<option value="">Select existing client...</option>';
+            supportClientSelect.innerHTML += '<option value="__new__">+ Add New Client</option>';
+            
+            clientNames.forEach(clientName => {
+                if (clientName) {
+                    const option = document.createElement('option');
+                    option.value = clientName;
+                    option.textContent = clientName;
+                    supportClientSelect.appendChild(option);
+                }
+            });
+        }
+
+        // Payment management
+        function addPayment() {
+            const projectId = parseInt(document.getElementById('paymentProject').value);
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const date = document.getElementById('paymentDate').value;
+
+            if (!projectId || !amount || !date) {
+                alert('Please fill in all payment fields.');
+                return;
+            }
+
+            const project = projects.find(p => p.id === projectId);
+            if (!project) {
+                alert('Project not found.');
+                return;
+            }
+
+            const remaining = project.totalAmount - project.paidAmount;
+            if (amount > remaining) {
+                alert(`Payment amount exceeds remaining balance of ${remaining.toFixed(2)}.`);
+                return;
+            }
+
+            const payment = {
+                id: Date.now(),
+                projectId,
+                amount,
+                date,
+                clientName: project.clientName,
+                type: 'project'
+            };
+
+            payments.push(payment);
+            project.paidAmount += amount;
+
+            saveData();
+            updateProjectsTable();
+            updateProjectOptions();
+            clearPaymentForm();
+            updateDashboard();
+            updateMRRMetrics();
+        }
+
+        function clearPaymentForm() {
+            document.getElementById('paymentProject').value = '';
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentDate').value = '';
+        }
+
+        // Support Plan Management
+        function addSupportPlan() {
+            const clientNameSelect = document.getElementById('supportClientName').value;
+            const clientNameNew = document.getElementById('supportClientNameNew').value;
+            const clientName = clientNameSelect === '__new__' ? clientNameNew : clientNameSelect;
+            
+            const planType = document.getElementById('supportPlanType').value;
+            const monthlyAmount = parseFloat(document.getElementById('supportMonthlyAmount').value) || 0;
+            const startDate = document.getElementById('supportStartDate').value;
+            const billingDay = parseInt(document.getElementById('supportBillingDay').value) || 1;
+            const status = document.getElementById('supportStatus').value;
+            const services = document.getElementById('supportServices').value;
+            const endDate = document.getElementById('supportEndDate').value;
+
+            if (!clientName || monthlyAmount <= 0 || !startDate) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const supportPlan = {
+                id: Date.now(),
+                clientName,
+                planType,
+                monthlyAmount,
+                startDate,
+                billingDay,
+                status,
+                services,
+                endDate
+            };
+
+            supportPlans.push(supportPlan);
+            saveData();
+            updateSupportPlansTable();
+            updateSupportPlanOptions();
+            updateClientOptions();
+            clearSupportPlanForm();
+            updateDashboard();
+            updateMRRMetrics();
+        }
+
+        function updateSupportPlansTable() {
+            const tbody = document.querySelector('#supportPlansTable tbody');
+            tbody.innerHTML = '';
+
+            supportPlans.forEach(plan => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${plan.clientName}</td>
+                    <td>${getSupportPlanTypeLabel(plan.planType)}</td>
+                    <td>${plan.monthlyAmount.toFixed(2)}</td>
+                    <td>${plan.billingDay}</td>
+                    <td>${plan.startDate}</td>
+                    <td><span style="color: ${plan.status === 'active' ? '#28a745' : plan.status === 'paused' ? '#ffc107' : '#dc3545'};">${plan.status.toUpperCase()}</span></td>
+                    <td><button class="delete-btn" onclick="deleteSupportPlan(${plan.id})">Delete</button></td>
+                `;
+            });
+        }
+
+        function getSupportPlanTypeLabel(type) {
+            const labels = {
+                'basic': 'Basic ($50)',
+                'standard': 'Standard ($100)',
+                'premium': 'Premium ($200)',
+                'enterprise': 'Enterprise ($350)',
+                'custom': 'Custom'
+            };
+            return labels[type] || type;
+        }
+
+        function deleteSupportPlan(id) {
+            if (confirm('Are you sure you want to delete this support plan? This will also remove all related payments.')) {
+                supportPlans = supportPlans.filter(p => p.id !== id);
+                // Also remove related support payments
+                payments = payments.filter(p => !(p.type === 'support' && p.supportPlanId === id));
+                saveData();
+                updateSupportPlansTable();
+                updateSupportPlanOptions();
+                updateClientOptions();
+                updateDashboard();
+                updateMRRMetrics();
+            }
+        }
+
+        function clearSupportPlanForm() {
+            document.getElementById('supportClientName').value = '';
+            document.getElementById('supportClientNameNew').value = '';
+            document.getElementById('supportClientNameNew').style.display = 'none';
+            document.getElementById('supportMonthlyAmount').value = '';
+            document.getElementById('supportStartDate').value = '';
+            document.getElementById('supportBillingDay').value = '';
+            document.getElementById('supportServices').value = '';
+            document.getElementById('supportEndDate').value = '';
+        }
+
+        function updateSupportPlanOptions() {
+            const select = document.getElementById('supportPaymentPlan');
+            select.innerHTML = '<option value="">Select a support plan...</option>';
+            
+            supportPlans.filter(plan => plan.status === 'active').forEach(plan => {
+                const option = document.createElement('option');
+                option.value = plan.id;
+                option.textContent = `${plan.clientName} - ${getSupportPlanTypeLabel(plan.planType)} (${plan.monthlyAmount.toFixed(2)}/month)`;
+                select.appendChild(option);
+            });
+        }
+
+        function addSupportPayment() {
+            const supportPlanId = parseInt(document.getElementById('supportPaymentPlan').value);
+            const amount = parseFloat(document.getElementById('supportPaymentAmount').value);
+            const date = document.getElementById('supportPaymentDate').value;
+            const paymentMonth = document.getElementById('supportPaymentMonth').value;
+
+            if (!supportPlanId || !amount || !date) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const supportPlan = supportPlans.find(p => p.id === supportPlanId);
+            if (!supportPlan) {
+                alert('Support plan not found.');
+                return;
+            }
+
+            const payment = {
+                id: Date.now(),
+                supportPlanId,
+                amount,
+                date,
+                clientName: supportPlan.clientName,
+                type: 'support',
+                paymentMonth
+            };
+
+            payments.push(payment);
+            saveData();
+            clearSupportPaymentForm();
+            updateDashboard();
+            updateMRRMetrics();
+        }
+
+        function clearSupportPaymentForm() {
+            document.getElementById('supportPaymentPlan').value = '';
+            document.getElementById('supportPaymentAmount').value = '';
+            document.getElementById('supportPaymentDate').value = '';
+            document.getElementById('supportPaymentMonth').value = '';
+        }
+
+        function updateMRRMetrics() {
+            const activePlans = supportPlans.filter(plan => plan.status === 'active');
+            const totalMRR = activePlans.reduce((sum, plan) => sum + plan.monthlyAmount, 0);
+            const totalARR = totalMRR * 12;
+            const avgPlanValue = activePlans.length > 0 ? totalMRR / activePlans.length : 0;
+
+            document.getElementById('activeSupportPlans').textContent = activePlans.length;
+            document.getElementById('monthlyRecurringRevenue').textContent = `${totalMRR.toFixed(2)}`;
+            document.getElementById('annualRecurringRevenue').textContent = `${totalARR.toFixed(2)}`;
+            document.getElementById('averagePlanValue').textContent = `${avgPlanValue.toFixed(2)}`;
+        }
+
+        // Expense management
+        function addExpense() {
+            const description = document.getElementById('expenseDescription').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            const date = document.getElementById('expenseDate').value;
+            const category = document.getElementById('expenseCategory').value;
+            const vendor = document.getElementById('expenseVendor').value;
+            const recurring = document.getElementById('expenseRecurring').value;
+
+            if (!description || !amount || !date) {
+                alert('Please fill in all required expense fields.');
+                return;
+            }
+
+            const expense = {
+                id: Date.now(),
+                description,
+                amount,
+                date,
+                category,
+                vendor,
+                recurring
+            };
+
+            expenses.push(expense);
+            saveData();
+            updateExpensesTable();
+            clearExpenseForm();
+            updateDashboard();
+        }
+
+        function updateExpensesTable() {
+            const tbody = document.querySelector('#expensesTable tbody');
+            tbody.innerHTML = '';
+
+            expenses.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(expense => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${expense.date}</td>
+                    <td>${expense.description}</td>
+                    <td>${expense.vendor}</td>
+                    <td>${expense.category}</td>
+                    <td>$${expense.amount.toFixed(2)}</td>
+                    <td>${expense.recurring}</td>
+                    <td><button class="delete-btn" onclick="deleteExpense(${expense.id})">Delete</button></td>
+                `;
+            });
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Are you sure you want to delete this expense?')) {
+                expenses = expenses.filter(e => e.id !== id);
+                saveData();
+                updateExpensesTable();
+                updateDashboard();
+            }
+        }
+
+        function clearExpenseForm() {
+            document.getElementById('expenseDescription').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseDate').value = '';
+            document.getElementById('expenseVendor').value = '';
+        }
+
+        // Tax management
+        function addQuarterlyPayment() {
+            const quarter = document.getElementById('taxQuarter').value;
+            const amount = parseFloat(document.getElementById('quarterlyPaymentAmount').value);
+            const date = document.getElementById('quarterlyPaymentDate').value;
+
+            if (!quarter || !amount || !date) {
+                alert('Please fill in all tax payment fields.');
+                return;
+            }
+
+            const payment = {
+                id: Date.now(),
+                quarter,
+                amount,
+                date
+            };
+
+            taxPayments.push(payment);
+            saveData();
+            updateTaxPaymentsTable();
+            clearTaxPaymentForm();
+        }
+
+        function updateTaxPaymentsTable() {
+            const tbody = document.querySelector('#taxPaymentsTable tbody');
+            tbody.innerHTML = '';
+
+            taxPayments.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(payment => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${payment.quarter}</td>
+                    <td>${payment.date}</td>
+                    <td>$${payment.amount.toFixed(2)}</td>
+                    <td><button class="delete-btn" onclick="deleteTaxPayment(${payment.id})">Delete</button></td>
+                `;
+            });
+        }
+
+        function deleteTaxPayment(id) {
+            if (confirm('Are you sure you want to delete this tax payment?')) {
+                taxPayments = taxPayments.filter(p => p.id !== id);
+                saveData();
+                updateTaxPaymentsTable();
+            }
+        }
+
+        function clearTaxPaymentForm() {
+            document.getElementById('quarterlyPaymentAmount').value = '';
+            document.getElementById('quarterlyPaymentDate').value = '';
+        }
+
+        // Dashboard calculations
+        function updateDashboard() {
+            const fromDate = new Date(document.getElementById('fromDate').value);
+            const toDate = new Date(document.getElementById('toDate').value);
+
+            // Calculate revenue in date range - separate project and support revenue
+            const filteredPayments = payments.filter(p => {
+                const paymentDate = new Date(p.date);
+                return paymentDate >= fromDate && paymentDate <= toDate;
+            });
+
+            const projectPayments = filteredPayments.filter(p => p.type === 'project' || !p.type);
+            const supportPayments = filteredPayments.filter(p => p.type === 'support');
+
+            const totalProjectRevenue = projectPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalSupportRevenue = supportPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalRevenue = totalProjectRevenue + totalSupportRevenue;
+
+            // Calculate expenses in date range
+            const filteredExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return expenseDate >= fromDate && expenseDate <= toDate;
+            });
+
+            const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+            // Calculate net profit and distributions
+            const netProfit = totalRevenue - totalExpenses;
+            const distributionPool = netProfit * 0.4; // 40% for distribution
+            const businessReserve = netProfit * 0.6; // 60% retained
+
+            // Member distributions
+            const jonDistribution = distributionPool * 0.35; // 35%
+            const alexDistribution = distributionPool * 0.33; // 33%
+            const joeDistribution = distributionPool * 0.32; // 32%
+
+            // Tax calculations
+            const federalRate = parseFloat(document.getElementById('federalTaxRate').value) / 100;
+            const stateRate = parseFloat(document.getElementById('stateTaxRate').value) / 100;
+            const selfEmploymentRate = parseFloat(document.getElementById('selfEmploymentTaxRate').value) / 100;
+
+            const federalTax = netProfit * federalRate;
+            const stateTax = netProfit * stateRate;
+            const selfEmploymentTax = netProfit * selfEmploymentRate;
+
+            // Update dashboard display
+            document.getElementById('totalProjectRevenue').textContent = `${totalProjectRevenue.toFixed(2)}`;
+            document.getElementById('totalSupportRevenue').textContent = `${totalSupportRevenue.toFixed(2)}`;
+            document.getElementById('totalRevenue').textContent = `${totalRevenue.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `${totalExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `${netProfit.toFixed(2)}`;
+            document.getElementById('distributionPool').textContent = `${distributionPool.toFixed(2)}`;
+            document.getElementById('businessReserve').textContent = `${businessReserve.toFixed(2)}`;
+
+            document.getElementById('jonDistribution').textContent = `${jonDistribution.toFixed(2)}`;
+            document.getElementById('alexDistribution').textContent = `${alexDistribution.toFixed(2)}`;
+            document.getElementById('joeDistribution').textContent = `${joeDistribution.toFixed(2)}`;
+
+            document.getElementById('federalTax').textContent = `${federalTax.toFixed(2)}`;
+            document.getElementById('stateTax').textContent = `${stateTax.toFixed(2)}`;
+            document.getElementById('selfEmploymentTax').textContent = `${selfEmploymentTax.toFixed(2)}`;
+
+            updateMRRMetrics();
+            updateTaxProjections();
+        }
+
+        function updateTaxProjections() {
+            // Simple annual projections based on current data
+            const currentRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
+            const currentExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const currentProfit = currentRevenue - currentExpenses;
+
+            // Annualize based on months of data (rough estimate)
+            const monthsOfData = Math.max(1, Math.ceil((Date.now() - Math.min(...payments.map(p => new Date(p.date).getTime()))) / (30 * 24 * 60 * 60 * 1000)));
+            const projectedAnnualRevenue = currentRevenue * (12 / monthsOfData);
+            const projectedAnnualExpenses = currentExpenses * (12 / monthsOfData);
+            const projectedAnnualProfit = projectedAnnualRevenue - projectedAnnualExpenses;
+
+            const federalRate = parseFloat(document.getElementById('federalTaxRate').value) / 100;
+            const stateRate = parseFloat(document.getElementById('stateTaxRate').value) / 100;
+            const selfEmploymentRate = parseFloat(document.getElementById('selfEmploymentTaxRate').value) / 100;
+
+            const totalTaxLiability = projectedAnnualProfit * (federalRate + stateRate + selfEmploymentRate);
+
+            document.getElementById('projectedRevenue').textContent = `$${projectedAnnualRevenue.toFixed(2)}`;
+            document.getElementById('projectedExpenses').textContent = `$${projectedAnnualExpenses.toFixed(2)}`;
+            document.getElementById('projectedProfit').textContent = `$${projectedAnnualProfit.toFixed(2)}`;
+            document.getElementById('totalTaxLiability').textContent = `$${totalTaxLiability.toFixed(2)}`;
+        }
+
+        function updateTaxCalculations() {
+            updateDashboard();
+        }
+
+        // Data persistence
+        function saveData() {
+            const data = {
+                projects,
+                expenses,
+                payments,
+                taxPayments,
+                supportPlans
+            };
+            // In a real application, this would save to a database or file
+            // For now, we'll use localStorage
+            localStorage.setItem('daedabyteFinancials', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('daedabyteFinancials');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                projects = data.projects || [];
+                expenses = data.expenses || [];
+                payments = data.payments || [];
+                taxPayments = data.taxPayments || [];
+                supportPlans = data.supportPlans || [];
+                
+                updateProjectsTable();
+                updateExpensesTable();
+                updateTaxPaymentsTable();
+                updateSupportPlansTable();
+                updateSupportPlanOptions();
+                updateClientOptions();
+                updateMRRMetrics();
+            }
+        }
+
+        // Handle project type change for amount auto-fill
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectTypeSelect = document.getElementById('projectType');
+            const totalAmountInput = document.getElementById('totalAmount');
+            
+            projectTypeSelect.addEventListener('change', function() {
+                const type = this.value;
+                switch(type) {
+                    case 'basic':
+                        totalAmountInput.value = '750';
+                        break;
+                    case 'standard':
+                        totalAmountInput.value = '2000';
+                        break;
+                    case 'premium':
+                        totalAmountInput.value = '3000';
+                        break;
+                    default:
+                        totalAmountInput.value = '';
+                }
+            });
+            
+            // Handle support plan type change for amount auto-fill
+            const supportPlanTypeSelect = document.getElementById('supportPlanType');
+            const supportMonthlyAmountInput = document.getElementById('supportMonthlyAmount');
+            
+            supportPlanTypeSelect.addEventListener('change', function() {
+                const type = this.value;
+                switch(type) {
+                    case 'basic':
+                        supportMonthlyAmountInput.value = '50';
+                        break;
+                    case 'standard':
+                        supportMonthlyAmountInput.value = '100';
+                        break;
+                    case 'premium':
+                        supportMonthlyAmountInput.value = '200';
+                        break;
+                    case 'enterprise':
+                        supportMonthlyAmountInput.value = '350';
+                        break;
+                    default:
+                        supportMonthlyAmountInput.value = '';
+                }
+            });
+            
+            // Auto-fill support payment amount when plan is selected
+            const supportPaymentPlanSelect = document.getElementById('supportPaymentPlan');
+            const supportPaymentAmountInput = document.getElementById('supportPaymentAmount');
+            
+            supportPaymentPlanSelect.addEventListener('change', function() {
+                const planId = parseInt(this.value);
+                if (planId) {
+                    const plan = supportPlans.find(p => p.id === planId);
+                    if (plan) {
+                        supportPaymentAmountInput.value = plan.monthlyAmount.toFixed(2);
+                    }
+                } else {
+                    supportPaymentAmountInput.value = '';
+                }
+            });
+            
+            // Handle client name selection for support plans
+            const supportClientNameSelect = document.getElementById('supportClientName');
+            const supportClientNameNewInput = document.getElementById('supportClientNameNew');
+            
+            supportClientNameSelect.addEventListener('change', function() {
+                if (this.value === '__new__') {
+                    supportClientNameNewInput.style.display = 'block';
+                    supportClientNameNewInput.focus();
+                } else {
+                    supportClientNameNewInput.style.display = 'none';
+                    supportClientNameNewInput.value = '';
+                }
+            });
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+
+        // Data Export/Import Functions
+        function showExportStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('exportStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `export-status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function exportAllData() {
+            const data = {
+                projects,
+                expenses,
+                payments,
+                taxPayments,
+                supportPlans,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `daedabyte-financials-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showExportStatus('✅ Data exported successfully! Check your downloads folder.', 'success');
+        }
+
+        function importAllData() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (!importedData.projects || !importedData.expenses || !importedData.payments) {
+                        showExportStatus('❌ Invalid file format. Please select a valid Daedabyte financial data file.', 'error');
+                        return;
+                    }
+                    
+                    // Confirm import
+                    if (confirm(`Import data from ${importedData.exportDate ? new Date(importedData.exportDate).toLocaleDateString() : 'unknown date'}?\n\nThis will replace all current data.`)) {
+                        projects = importedData.projects || [];
+                        expenses = importedData.expenses || [];
+                        payments = importedData.payments || [];
+                        taxPayments = importedData.taxPayments || [];
+                        supportPlans = importedData.supportPlans || [];
+                        
+                        saveData();
+                        updateProjectsTable();
+                        updateExpensesTable();
+                        updateTaxPaymentsTable();
+                        updateSupportPlansTable();
+                        updateProjectOptions();
+                        updateSupportPlanOptions();
+                        updateClientOptions();
+                        updateDashboard();
+                        updateMRRMetrics();
+                        
+                        showExportStatus('✅ Data imported successfully! All tables have been updated.', 'success');
+                    }
+                } catch (error) {
+                    showExportStatus('❌ Error importing file. Please check the file format and try again.', 'error');
+                    console.error('Import error:', error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportCSV(type) {
+            let data = [];
+            let filename = '';
+            let headers = [];
+            
+            switch(type) {
+                case 'projects':
+                    headers = ['Client Name', 'Project Type', 'Total Amount', 'Paid Amount', 'Remaining', 'Start Date', 'Payment Schedule', 'Status'];
+                    data = projects.map(p => [
+                        p.clientName,
+                        getProjectTypeLabel(p.projectType),
+                        p.totalAmount.toFixed(2),
+                        p.paidAmount.toFixed(2),
+                        (p.totalAmount - p.paidAmount).toFixed(2),
+                        p.startDate,
+                        p.paymentSchedule,
+                        p.status
+                    ]);
+                    filename = 'daedabyte-projects';
+                    break;
+                    
+                case 'expenses':
+                    headers = ['Date', 'Description', 'Vendor', 'Category', 'Amount', 'Recurring'];
+                    data = expenses.map(e => [
+                        e.date,
+                        e.description,
+                        e.vendor,
+                        e.category,
+                        e.amount.toFixed(2),
+                        e.recurring
+                    ]);
+                    filename = 'daedabyte-expenses';
+                    break;
+                    
+                case 'payments':
+                    headers = ['Date', 'Client Name', 'Amount', 'Type', 'Project/Plan ID'];
+                    data = payments.map(p => [
+                        p.date,
+                        p.clientName,
+                        p.amount.toFixed(2),
+                        p.type || 'project',
+                        p.projectId || p.supportPlanId || ''
+                    ]);
+                    filename = 'daedabyte-payments';
+                    break;
+                    
+                case 'supportPlans':
+                    headers = ['Client Name', 'Plan Type', 'Monthly Amount', 'Billing Day', 'Start Date', 'End Date', 'Status', 'Services'];
+                    data = supportPlans.map(s => [
+                        s.clientName,
+                        getSupportPlanTypeLabel(s.planType),
+                        s.monthlyAmount.toFixed(2),
+                        s.billingDay,
+                        s.startDate,
+                        s.endDate || '',
+                        s.status,
+                        s.services
+                    ]);
+                    filename = 'daedabyte-support-plans';
+                    break;
+            }
+            
+            const csvContent = [headers, ...data]
+                .map(row => row.map(field => `"${field}"`).join(','))
+                .join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${filename}-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showExportStatus(`✅ ${type.charAt(0).toUpperCase() + type.slice(1)} exported to CSV successfully!`, 'success');
+        }
+
+        function generateCoOwnerReport() {
+            const reportPeriod = document.getElementById('reportPeriod').value;
+            let fromDate, toDate, periodLabel;
+            
+            const now = new Date();
+            
+            switch (reportPeriod) {
+                case 'thisMonth':
+                    fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    periodLabel = `${fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+                    break;
+                case 'lastMonth':
+                    fromDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    toDate = new Date(now.getFullYear(), now.getMonth(), 0);
+                    periodLabel = `${fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+                    break;
+                case 'thisQuarter':
+                    const quarter = Math.floor(now.getMonth() / 3);
+                    fromDate = new Date(now.getFullYear(), quarter * 3, 1);
+                    toDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
+                    periodLabel = `Q${quarter + 1} ${now.getFullYear()}`;
+                    break;
+                case 'lastQuarter':
+                    const lastQuarter = Math.floor(now.getMonth() / 3) - 1;
+                    const year = lastQuarter < 0 ? now.getFullYear() - 1 : now.getFullYear();
+                    const q = lastQuarter < 0 ? 3 : lastQuarter;
+                    fromDate = new Date(year, q * 3, 1);
+                    toDate = new Date(year, (q + 1) * 3, 0);
+                    periodLabel = `Q${q + 1} ${year}`;
+                    break;
+                case 'ytd':
+                    fromDate = new Date(now.getFullYear(), 0, 1);
+                    toDate = now;
+                    periodLabel = `Year to Date ${now.getFullYear()}`;
+                    break;
+                default:
+                    fromDate = new Date(document.getElementById('fromDate').value);
+                    toDate = new Date(document.getElementById('toDate').value);
+                    periodLabel = `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`;
+            }
+            
+            // Calculate financial data for the period
+            const filteredPayments = payments.filter(p => {
+                const paymentDate = new Date(p.date);
+                return paymentDate >= fromDate && paymentDate <= toDate;
+            });
+            
+            const filteredExpenses = expenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return expenseDate >= fromDate && expenseDate <= toDate;
+            });
+
+            // Separate project and support revenue
+            const projectPayments = filteredPayments.filter(p => p.type === 'project' || !p.type);
+            const supportPayments = filteredPayments.filter(p => p.type === 'support');
+            
+            const totalProjectRevenue = projectPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalSupportRevenue = supportPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalRevenue = totalProjectRevenue + totalSupportRevenue;
+            const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+            // Calculate MRR metrics
+            const activePlans = supportPlans.filter(plan => plan.status === 'active');
+            const currentMRR = activePlans.reduce((sum, plan) => sum + plan.monthlyAmount, 0);
+            const currentARR = currentMRR * 12;
+            const netProfit = totalRevenue - totalExpenses;
+            const distributionPool = netProfit * 0.4;
+            const businessReserve = netProfit * 0.6;
+            
+            const jonDistribution = distributionPool * 0.35;
+            const alexDistribution = distributionPool * 0.33;
+            const joeDistribution = distributionPool * 0.32;
+            
+            // Tax calculations
+            const federalRate = parseFloat(document.getElementById('federalTaxRate').value) / 100;
+            const stateRate = parseFloat(document.getElementById('stateTaxRate').value) / 100;
+            const selfEmploymentRate = parseFloat(document.getElementById('selfEmploymentTaxRate').value) / 100;
+            
+            const estimatedTotalTax = netProfit * (federalRate + stateRate + selfEmploymentRate);
+            
+            // Group payments by client
+            const paymentsByClient = {};
+            filteredPayments.forEach(payment => {
+                if (!paymentsByClient[payment.clientName]) {
+                    paymentsByClient[payment.clientName] = 0;
+                }
+                paymentsByClient[payment.clientName] += payment.amount;
+            });
+            
+            // Group expenses by category
+            const expensesByCategory = {};
+            filteredExpenses.forEach(expense => {
+                if (!expensesByCategory[expense.category]) {
+                    expensesByCategory[expense.category] = 0;
+                }
+                expensesByCategory[expense.category] += expense.amount;
+            });
+            
+            const reportContent = `
+                <div style="max-width: 800px; margin: 0 auto; font-family: 'Segoe UI', Tahoma, sans-serif; color: #414141;">
+                    <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(90deg, #A678D1 0%, #FC7645 100%); color: white; border-radius: 8px;">
+                        <h2 style="margin: 0 0 10px 0; font-size: 2rem;">Daedabyte LLC</h2>
+                        <h3 style="margin: 0; font-size: 1.3rem;">Financial Report - ${periodLabel}</h3>
+                        <p style="margin: 10px 0 0 0; opacity: 0.9;">Generated on ${new Date().toLocaleDateString()}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                        <div style="background: #1D8A99; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <h4 style="margin: 0 0 5px 0; font-size: 0.9rem;">Total Revenue</h4>
+                            <div style="font-size: 1.5rem; font-weight: bold;">${totalRevenue.toFixed(2)}</div>
+                        </div>
+                        <div style="background: #FC7645; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <h4 style="margin: 0 0 5px 0; font-size: 0.9rem;">Total Expenses</h4>
+                            <div style="font-size: 1.5rem; font-weight: bold;">${totalExpenses.toFixed(2)}</div>
+                        </div>
+                        <div style="background: #A678D1; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <h4 style="margin: 0 0 5px 0; font-size: 0.9rem;">Net Profit</h4>
+                            <div style="font-size: 1.5rem; font-weight: bold;">${netProfit.toFixed(2)}</div>
+                        </div>
+                        <div style="background: #C3B86A; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <h4 style="margin: 0 0 5px 0; font-size: 0.9rem;">Est. Tax Liability</h4>
+                            <div style="font-size: 1.5rem; font-weight: bold;">${estimatedTotalTax.toFixed(2)}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 25px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #A678D1;">
+                        <h3 style="color: #A678D1; margin-bottom: 20px;">Member Distributions (40% of Net Profit)</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                            <div style="background: linear-gradient(135deg, #A678D1, #1D8A99); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <h4 style="margin: 0 0 10px 0;">Jonathan Bartholomew</h4>
+                                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">35% Share</div>
+                                <div style="font-size: 1.4rem; font-weight: bold;">${jonDistribution.toFixed(2)}</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #FC7645, #A678D1); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <h4 style="margin: 0 0 10px 0;">Alejandro Marquez Grande</h4>
+                                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">33% Share</div>
+                                <div style="font-size: 1.4rem; font-weight: bold;">${alexDistribution.toFixed(2)}</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #1D8A99, #FC7645); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <h4 style="margin: 0 0 10px 0;">Joseph Konkle</h4>
+                                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">32% Share</div>
+                                <div style="font-size: 1.4rem; font-weight: bold;">${joeDistribution.toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 15px; background: #F5F5F0; border-radius: 4px;">
+                            <strong>Business Reserve (60% of Net Profit): ${businessReserve.toFixed(2)}</strong>
+                            <br><small style="color: #666;">Reserved for taxes, quarterly payments, and business operations</small>
+                        </div>
+                    </div>
+                    
+                    ${Object.keys(paymentsByClient).length > 0 ? `
+                    <div style="background: white; padding: 25px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #FC7645;">
+                        <h3 style="color: #FC7645; margin-bottom: 15px;">Revenue by Client</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #F5F5F0;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">Client</th>
+                                    <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(paymentsByClient)
+                                    .sort(([,a], [,b]) => b - a)
+                                    .map(([client, amount]) => 
+                                        `<tr><td style="padding: 12px; border-bottom: 1px solid #eee;">${client}</td>
+                                         <td style="padding: 12px; text-align: right; border-bottom: 1px solid #eee;">${amount.toFixed(2)}</td></tr>`
+                                    ).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    ` : ''}
+                    
+                    ${Object.keys(expensesByCategory).length > 0 ? `
+                    <div style="background: white; padding: 25px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #1D8A99;">
+                        <h3 style="color: #1D8A99; margin-bottom: 15px;">Expenses by Category</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #F5F5F0;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">Category</th>
+                                    <th style="padding: 12px; text-align: right; border-bottom: 1px solid #ddd;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(expensesByCategory)
+                                    .sort(([,a], [,b]) => b - a)
+                                    .map(([category, amount]) => 
+                                        `<tr><td style="padding: 12px; border-bottom: 1px solid #eee; text-transform: capitalize;">${category}</td>
+                                         <td style="padding: 12px; text-align: right; border-bottom: 1px solid #eee;">${amount.toFixed(2)}</td></tr>`
+                                    ).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #C3B86A;">
+                        <h3 style="color: #C3B86A; margin-bottom: 15px;">Tax Summary</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <div>
+                                <strong>Federal Income Tax (${(federalRate * 100).toFixed(1)}%)</strong><br>
+                                ${(netProfit * federalRate).toFixed(2)}
+                            </div>
+                            <div>
+                                <strong>Virginia State Tax (${(stateRate * 100).toFixed(2)}%)</strong><br>
+                                ${(netProfit * stateRate).toFixed(2)}
+                            </div>
+                            <div>
+                                <strong>Self-Employment Tax (${(selfEmploymentRate * 100).toFixed(1)}%)</strong><br>
+                                ${(netProfit * selfEmploymentRate).toFixed(2)}
+                            </div>
+                            <div>
+                                <strong>Total Estimated Tax Liability</strong><br>
+                                ${estimatedTotalTax.toFixed(2)}
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 15px; background: #F5F5F0; border-radius: 4px; font-size: 0.9rem; color: #666;">
+                            <strong>Note:</strong> This is an estimate based on current tax rates. Consult with a tax professional for accurate planning.
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center; color: #666; font-size: 0.9rem;">
+                        <p>Report generated by Daedabyte LLC Financial Tracker</p>
+                        <p>For internal use by Jonathan Bartholomew, Alejandro Marquez Grande, and Joseph Konkle</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('reportContent').innerHTML = reportContent;
+            document.getElementById('coOwnerReport').style.display = 'block';
+            
+            // Scroll to report
+            document.getElementById('coOwnerReport').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function printReport() {
+            const reportContent = document.getElementById('reportContent').innerHTML;
+            if (!reportContent) {
+                alert('Please generate a report first.');
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Daedabyte LLC Financial Report</title>
+                    <style>
+                        body { margin: 20px; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                        @media print {
+                            body { margin: 0; }
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>${reportContent}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
