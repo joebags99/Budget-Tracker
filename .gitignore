@@ -1,6 +1,24 @@
-daedabyte-financials-2025-09-17.json
-daedabyte-financials-2025-10-16.json
-daedabyte-financials-2025-10-23.json
-daedabyte-financials-2025-10-28.json
-daedabyte-financials-2025-10-29.json
-Financial Report 9-17.pdf
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
