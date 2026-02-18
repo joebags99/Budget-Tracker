@@ -2,14 +2,16 @@ import { useState, createContext, useContext } from 'react';
 import './App.css';
 import { FinancialProvider } from './context/FinancialContext.jsx';
 import { useToast } from './hooks/useToast.js';
-import Header  from './components/layout/Header.jsx';
-import TabNav  from './components/layout/TabNav.jsx';
-import Toast   from './components/layout/Toast.jsx';
-import Dashboard    from './components/dashboard/Dashboard.jsx';
-import Projects     from './components/projects/Projects.jsx';
-import Expenses     from './components/expenses/Expenses.jsx';
-import TaxPlanning  from './components/taxPlanning/TaxPlanning.jsx';
-import Reports      from './components/reports/Reports.jsx';
+import Header     from './components/layout/Header.jsx';
+import TabNav     from './components/layout/TabNav.jsx';
+import Toast      from './components/layout/Toast.jsx';
+import Dashboard  from './components/dashboard/Dashboard.jsx';
+import Projects   from './components/projects/Projects.jsx';
+import Expenses   from './components/expenses/Expenses.jsx';
+import Clients    from './components/clients/Clients.jsx';
+import Analytics  from './components/analytics/Analytics.jsx';
+import TaxPlanning from './components/taxPlanning/TaxPlanning.jsx';
+import Reports    from './components/reports/Reports.jsx';
 
 // Toast context so any component can call showToast
 export const ToastContext = createContext(null);
@@ -24,6 +26,8 @@ function AppInner() {
       case 'dashboard': return <Dashboard />;
       case 'projects':  return <Projects />;
       case 'expenses':  return <Expenses />;
+      case 'clients':   return <Clients />;
+      case 'analytics': return <Analytics />;
       case 'tax':       return <TaxPlanning />;
       case 'reports':   return <Reports />;
       default:          return <Dashboard />;

@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { calcAnnualProjections, calcTax } from '../../utils/calculations.js';
 import { formatCurrency, today } from '../../utils/dateUtils.js';
+import { useState } from 'react';
 
 const QUARTER_INFO = {
   Q1: { label: 'Q1 (Jan–Mar)', due: 'April 15' },
@@ -14,15 +14,19 @@ const QUARTER_INFO = {
 export default function TaxPlanning() {
   const { state, dispatch } = useFinancial();
   const showToast = useAppToast();
-
-  const [rates, setRates] = useState({ federal: 22, state: 5.75, selfEmployment: 15.3 });
   const [payForm, setPayForm] = useState({ quarter: 'Q1', amount: '', date: today() });
 
+  // Use persisted rates from context
+  const rates = state.taxRates;
   const rateDecimals = { federal: rates.federal / 100, state: rates.state / 100, selfEmployment: rates.selfEmployment / 100 };
+
+  function setRate(key, val) {
+    dispatch({ type: 'UPDATE_TAX_RATES', payload: { [key]: parseFloat(val) || 0 } });
+  }
+
   const projections  = calcAnnualProjections(state.payments, state.expenses, rateDecimals);
   const taxProjected = calcTax(projections.projectedProfit, rateDecimals.federal, rateDecimals.state, rateDecimals.selfEmployment);
-
-  const totalPaid = state.taxPayments.reduce((s, t) => s + t.amount, 0);
+  const totalPaid    = state.taxPayments.reduce((s, t) => s + t.amount, 0);
 
   function handlePaySubmit(e) {
     e.preventDefault();
@@ -45,29 +49,27 @@ export default function TaxPlanning() {
 
   return (
     <div className="tab-content">
-      {/* Tax Rate Settings */}
       <div className="card">
         <h3>Tax Rate Settings</h3>
+        <p style={{ fontSize: '0.84rem', color: '#888', marginBottom: 14, fontStyle: 'italic' }}>
+          Rates are saved and used across all calculations. Consult a tax professional for accurate rates.
+        </p>
         <div className="tax-rate-row">
           <div className="form-group">
             <label>Federal Tax Rate (%)</label>
-            <input type="number" step="0.1" value={rates.federal} onChange={e => setRates(r => ({ ...r, federal: parseFloat(e.target.value) || 0 }))} />
+            <input type="number" step="0.1" value={rates.federal} onChange={e => setRate('federal', e.target.value)} />
           </div>
           <div className="form-group">
             <label>Virginia State Tax Rate (%)</label>
-            <input type="number" step="0.1" value={rates.state} onChange={e => setRates(r => ({ ...r, state: parseFloat(e.target.value) || 0 }))} />
+            <input type="number" step="0.1" value={rates.state} onChange={e => setRate('state', e.target.value)} />
           </div>
           <div className="form-group">
             <label>Self-Employment Tax Rate (%)</label>
-            <input type="number" step="0.1" value={rates.selfEmployment} onChange={e => setRates(r => ({ ...r, selfEmployment: parseFloat(e.target.value) || 0 }))} />
+            <input type="number" step="0.1" value={rates.selfEmployment} onChange={e => setRate('selfEmployment', e.target.value)} />
           </div>
         </div>
-        <p style={{ marginTop: 12, fontSize: '0.82rem', color: '#888', fontStyle: 'italic' }}>
-          Rates are used for projections only and are not saved. Consult a tax professional for accurate rates.
-        </p>
       </div>
 
-      {/* Annual Tax Projection */}
       <div className="card">
         <h3>Annual Tax Projection</h3>
         <div className="metrics-grid">
@@ -90,8 +92,8 @@ export default function TaxPlanning() {
         </div>
         <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
           {[
-            { label: `Federal (${rates.federal}%)`, val: taxProjected.federal },
-            { label: `VA State (${rates.state}%)`,  val: taxProjected.state },
+            { label: `Federal (${rates.federal}%)`,           val: taxProjected.federal },
+            { label: `VA State (${rates.state}%)`,            val: taxProjected.state },
             { label: `Self-Employment (${rates.selfEmployment}%)`, val: taxProjected.selfEmployment },
           ].map(item => (
             <div key={item.label} style={{ background: '#f8f9fa', borderRadius: 6, padding: '10px 14px', display: 'flex', justifyContent: 'space-between' }}>
@@ -106,7 +108,6 @@ export default function TaxPlanning() {
         </div>
       </div>
 
-      {/* Quarterly Payments Form */}
       <div className="card">
         <h3>Record Quarterly Estimated Payment</h3>
         <form onSubmit={handlePaySubmit}>
@@ -134,7 +135,6 @@ export default function TaxPlanning() {
         </form>
       </div>
 
-      {/* Payment History */}
       <div className="card">
         <h3>Quarterly Tax Payment History</h3>
         <div className="table-wrap">
