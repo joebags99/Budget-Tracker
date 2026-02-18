@@ -2,6 +2,8 @@ const TABS = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'projects',  label: 'Projects & Revenue' },
   { id: 'expenses',  label: 'Expenses' },
+  { id: 'clients',   label: 'Clients' },
+  { id: 'analytics', label: 'Analytics' },
   { id: 'tax',       label: 'Tax Planning' },
   { id: 'reports',   label: 'Reports & Export' },
 ];

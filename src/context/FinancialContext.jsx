@@ -4,12 +4,16 @@ import { generateId } from '../utils/calculations.js';
 
 const STORAGE_KEY = 'daedabyteFinancials';
 
+export const DEFAULT_TAX_RATES = { federal: 22, state: 5.75, selfEmployment: 15.3 };
+
 const initialState = {
   projects: [],
   expenses: [],
   payments: [],
   taxPayments: [],
   supportPlans: [],
+  clients: [],
+  taxRates: { ...DEFAULT_TAX_RATES },
 };
 
 function migrateExpenses(expenses) {
@@ -21,7 +25,6 @@ function migrateExpenses(expenses) {
 
 function reducer(state, action) {
   switch (action.type) {
-    // ── Projects ──────────────────────────────────────────────────────
     case 'ADD_PROJECT':
       return { ...state, projects: [...state.projects, { ...action.payload, id: generateId() }] };
     case 'UPDATE_PROJECT':
@@ -29,7 +32,6 @@ function reducer(state, action) {
     case 'DELETE_PROJECT':
       return { ...state, projects: state.projects.filter(p => p.id !== action.payload) };
 
-    // ── Expenses ──────────────────────────────────────────────────────
     case 'ADD_EXPENSE': {
       const exp = { ...action.payload, id: generateId(), irsLine: getIRSLine(action.payload.category) };
       return { ...state, expenses: [...state.expenses, exp] };
@@ -46,7 +48,6 @@ function reducer(state, action) {
     case 'DELETE_EXPENSE':
       return { ...state, expenses: state.expenses.filter(e => e.id !== action.payload) };
 
-    // ── Payments ──────────────────────────────────────────────────────
     case 'ADD_PAYMENT':
       return { ...state, payments: [...state.payments, { ...action.payload, id: generateId() }] };
     case 'UPDATE_PAYMENT':
@@ -54,13 +55,11 @@ function reducer(state, action) {
     case 'DELETE_PAYMENT':
       return { ...state, payments: state.payments.filter(p => p.id !== action.payload) };
 
-    // ── Tax Payments ──────────────────────────────────────────────────
     case 'ADD_TAX_PAYMENT':
       return { ...state, taxPayments: [...state.taxPayments, { ...action.payload, id: generateId() }] };
     case 'DELETE_TAX_PAYMENT':
       return { ...state, taxPayments: state.taxPayments.filter(t => t.id !== action.payload) };
 
-    // ── Support Plans ─────────────────────────────────────────────────
     case 'ADD_SUPPORT_PLAN':
       return { ...state, supportPlans: [...state.supportPlans, { ...action.payload, id: generateId() }] };
     case 'UPDATE_SUPPORT_PLAN':
@@ -68,19 +67,29 @@ function reducer(state, action) {
     case 'DELETE_SUPPORT_PLAN':
       return { ...state, supportPlans: state.supportPlans.filter(s => s.id !== action.payload) };
 
-    // ── Bulk ops ──────────────────────────────────────────────────────
+    case 'ADD_CLIENT':
+      return { ...state, clients: [...state.clients, { ...action.payload, id: generateId(), createdAt: new Date().toISOString() }] };
+    case 'UPDATE_CLIENT':
+      return { ...state, clients: state.clients.map(c => c.id === action.payload.id ? action.payload : c) };
+    case 'DELETE_CLIENT':
+      return { ...state, clients: state.clients.filter(c => c.id !== action.payload) };
+
+    case 'UPDATE_TAX_RATES':
+      return { ...state, taxRates: { ...state.taxRates, ...action.payload } };
+
     case 'IMPORT_ALL': {
       const imported = action.payload;
       return {
         projects:     imported.projects     || [],
-        expenses:     migrateExpenses(imported.expenses     || []),
+        expenses:     migrateExpenses(imported.expenses || []),
         payments:     imported.payments     || [],
         taxPayments:  imported.taxPayments  || [],
         supportPlans: imported.supportPlans || [],
+        clients:      imported.clients      || [],
+        taxRates:     imported.taxRates     || { ...DEFAULT_TAX_RATES },
       };
     }
 
-    // ── Update project paid amount when payment added ──────────────────
     case 'RECORD_PROJECT_PAYMENT': {
       const { projectId, amount, paymentData } = action.payload;
       const updatedProjects = state.projects.map(p =>
@@ -111,10 +120,12 @@ export function FinancialProvider({ children }) {
         const data = JSON.parse(saved);
         return {
           projects:     data.projects     || [],
-          expenses:     migrateExpenses(data.expenses     || []),
+          expenses:     migrateExpenses(data.expenses || []),
           payments:     data.payments     || [],
           taxPayments:  data.taxPayments  || [],
           supportPlans: data.supportPlans || [],
+          clients:      data.clients      || [],
+          taxRates:     data.taxRates     || { ...DEFAULT_TAX_RATES },
         };
       }
     } catch {}
