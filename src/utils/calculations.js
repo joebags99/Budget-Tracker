@@ -1,7 +1,7 @@
 export const MEMBERS = [
-  { id: 'jon',  name: 'Jonathan Bartholomew',     share: 0.34 },
+  { id: 'jon',  name: 'Jonathan Bartholomew',     share: 0.35 },
   { id: 'alex', name: 'Alejandro Marquez Grande', share: 0.33 },
-  { id: 'joe',  name: 'Joseph Konkle',            share: 0.33 },
+  { id: 'joe',  name: 'Joseph Konkle',            share: 0.32 },
 ];
 
 export const DISTRIBUTION_POOL_RATE = 0.4; // 40% of net profit goes to members
