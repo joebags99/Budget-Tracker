@@ -97,6 +97,32 @@ function reducer(state, action) {
     case 'DELETE_SUBSCRIPTION_CHARGE':
       return { ...state, subscriptionCharges: state.subscriptionCharges.filter(c => c.id !== action.payload) };
 
+    case 'MIGRATE_TO_SUBSCRIPTION': {
+      // Atomically: create subscription, convert each expense entry into a charge,
+      // and flip those expenses to recurring:'no' so they don't double-count.
+      const { vendor, category, notes, expenses: toMigrate } = action.payload;
+      const subId = generateId();
+      const newSub = { id: subId, vendor, category, notes: notes || '' };
+      const newCharges = toMigrate.map(e => ({
+        id: generateId(),
+        subscriptionId: subId,
+        amount: e.amount,
+        date: e.date,
+        notes: e.description,
+        vendor,
+      }));
+      const migratedIds = new Set(toMigrate.map(e => e.id));
+      const updatedExpenses = state.expenses.map(e =>
+        migratedIds.has(e.id) ? { ...e, recurring: 'no' } : e
+      );
+      return {
+        ...state,
+        subscriptions: [...state.subscriptions, newSub],
+        subscriptionCharges: [...state.subscriptionCharges, ...newCharges],
+        expenses: updatedExpenses,
+      };
+    }
+
     case 'UPDATE_TAX_RATES':
       return { ...state, taxRates: { ...state.taxRates, ...action.payload } };
 

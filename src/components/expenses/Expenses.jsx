@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import ExpenseForm        from './ExpenseForm.jsx';
-import ExpensesTable      from './ExpensesTable.jsx';
-import SubscriptionForm   from './SubscriptionForm.jsx';
-import SubscriptionsTable from './SubscriptionsTable.jsx';
+import ExpenseForm          from './ExpenseForm.jsx';
+import ExpensesTable        from './ExpensesTable.jsx';
+import SubscriptionForm     from './SubscriptionForm.jsx';
+import SubscriptionsTable   from './SubscriptionsTable.jsx';
+import MigrateSubscriptions from './MigrateSubscriptions.jsx';
 
 export default function Expenses() {
   const { state } = useFinancial();
@@ -12,6 +13,7 @@ export default function Expenses() {
 
   return (
     <div className="tab-content">
+      <MigrateSubscriptions />
       <SubscriptionForm editSub={editSub} onDone={() => setEditSub(null)} />
       <SubscriptionsTable
         subscriptions={state.subscriptions || []}
