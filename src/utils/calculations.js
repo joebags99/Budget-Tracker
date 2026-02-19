@@ -47,22 +47,31 @@ export function calcMRR(supportPlans) {
   return { active: active.length, mrr, arr: mrr * 12, avg: active.length ? mrr / active.length : 0 };
 }
 
-export function calcOverhead(supportPlans, expenses) {
+export function calcOverhead(supportPlans, expenses, subscriptions = [], subscriptionCharges = []) {
   const active = supportPlans.filter(p => p.status === 'active');
   const mrr = active.reduce((s, p) => s + p.monthlyAmount, 0);
   const arr = mrr * 12;
 
-  const monthlyExp  = expenses.filter(e => e.recurring === 'monthly').reduce((s, e) => s + e.amount, 0);
-  const quarterlyExp = expenses.filter(e => e.recurring === 'quarterly').reduce((s, e) => s + e.amount, 0);
-  const annualExp   = expenses.filter(e => e.recurring === 'annually').reduce((s, e) => s + e.amount, 0);
-  const annualRecurringExpenses = monthlyExp * 12 + quarterlyExp * 4 + annualExp;
+  const staticMonthlyExp = expenses.filter(e => e.recurring === 'monthly').reduce((s, e) => s + e.amount, 0);
+  const quarterlyExp     = expenses.filter(e => e.recurring === 'quarterly').reduce((s, e) => s + e.amount, 0);
+  const annualExp        = expenses.filter(e => e.recurring === 'annually').reduce((s, e) => s + e.amount, 0);
+
+  // Average actual monthly charges per subscription vendor
+  const subAvgMonthly = subscriptions.reduce((sum, sub) => {
+    const charges = subscriptionCharges.filter(c => String(c.subscriptionId) === String(sub.id));
+    if (charges.length === 0) return sum;
+    return sum + charges.reduce((s, c) => s + c.amount, 0) / charges.length;
+  }, 0);
+
+  const monthlyRecurringExpenses = staticMonthlyExp + subAvgMonthly;
+  const annualRecurringExpenses  = monthlyRecurringExpenses * 12 + quarterlyExp * 4 + annualExp;
 
   return {
     mrr,
     arr,
-    monthlyRecurringExpenses: monthlyExp,
+    monthlyRecurringExpenses,
     annualRecurringExpenses,
-    monthlyNet: mrr - monthlyExp,
+    monthlyNet: mrr - monthlyRecurringExpenses,
     annualNet:  arr - annualRecurringExpenses,
   };
 }

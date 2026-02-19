@@ -38,7 +38,7 @@ export default function Dashboard() {
     stateRate:   rates.state,
     selfEmploymentRate: rates.selfEmployment,
   };
-  const overhead = calcOverhead(state.supportPlans, state.expenses);
+  const overhead = calcOverhead(state.supportPlans, state.expenses, state.subscriptions || [], state.subscriptionCharges || []);
 
   return (
     <div className="tab-content">

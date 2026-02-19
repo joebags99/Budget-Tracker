@@ -13,6 +13,8 @@ const initialState = {
   taxPayments: [],
   supportPlans: [],
   clients: [],
+  subscriptions: [],
+  subscriptionCharges: [],
   taxRates: { ...DEFAULT_TAX_RATES },
 };
 
@@ -80,19 +82,36 @@ function reducer(state, action) {
     case 'DELETE_CLIENT':
       return { ...state, clients: state.clients.filter(c => c.id !== action.payload) };
 
+    case 'ADD_SUBSCRIPTION':
+      return { ...state, subscriptions: [...state.subscriptions, { ...action.payload, id: generateId() }] };
+    case 'UPDATE_SUBSCRIPTION':
+      return { ...state, subscriptions: state.subscriptions.map(s => s.id === action.payload.id ? action.payload : s) };
+    case 'DELETE_SUBSCRIPTION':
+      return {
+        ...state,
+        subscriptions: state.subscriptions.filter(s => s.id !== action.payload),
+        subscriptionCharges: state.subscriptionCharges.filter(c => c.subscriptionId !== action.payload),
+      };
+    case 'RECORD_SUBSCRIPTION_CHARGE':
+      return { ...state, subscriptionCharges: [...state.subscriptionCharges, { ...action.payload, id: generateId() }] };
+    case 'DELETE_SUBSCRIPTION_CHARGE':
+      return { ...state, subscriptionCharges: state.subscriptionCharges.filter(c => c.id !== action.payload) };
+
     case 'UPDATE_TAX_RATES':
       return { ...state, taxRates: { ...state.taxRates, ...action.payload } };
 
     case 'IMPORT_ALL': {
       const imported = action.payload;
       return {
-        projects:     migrateIds(imported.projects),
-        expenses:     migrateExpenses(imported.expenses || []),
-        payments:     migrateIds(imported.payments),
-        taxPayments:  migrateIds(imported.taxPayments),
-        supportPlans: migrateIds(imported.supportPlans),
-        clients:      migrateIds(imported.clients),
-        taxRates:     imported.taxRates     || { ...DEFAULT_TAX_RATES },
+        projects:            migrateIds(imported.projects),
+        expenses:            migrateExpenses(imported.expenses || []),
+        payments:            migrateIds(imported.payments),
+        taxPayments:         migrateIds(imported.taxPayments),
+        supportPlans:        migrateIds(imported.supportPlans),
+        clients:             migrateIds(imported.clients),
+        subscriptions:       migrateIds(imported.subscriptions),
+        subscriptionCharges: migrateIds(imported.subscriptionCharges),
+        taxRates:            imported.taxRates || { ...DEFAULT_TAX_RATES },
       };
     }
 
@@ -125,13 +144,15 @@ export function FinancialProvider({ children }) {
       if (saved) {
         const data = JSON.parse(saved);
         return {
-          projects:     migrateIds(data.projects),
-          expenses:     migrateExpenses(data.expenses || []),
-          payments:     migrateIds(data.payments),
-          taxPayments:  migrateIds(data.taxPayments),
-          supportPlans: migrateIds(data.supportPlans),
-          clients:      migrateIds(data.clients),
-          taxRates:     data.taxRates     || { ...DEFAULT_TAX_RATES },
+          projects:            migrateIds(data.projects),
+          expenses:            migrateExpenses(data.expenses || []),
+          payments:            migrateIds(data.payments),
+          taxPayments:         migrateIds(data.taxPayments),
+          supportPlans:        migrateIds(data.supportPlans),
+          clients:             migrateIds(data.clients),
+          subscriptions:       migrateIds(data.subscriptions),
+          subscriptionCharges: migrateIds(data.subscriptionCharges),
+          taxRates:            data.taxRates || { ...DEFAULT_TAX_RATES },
         };
       }
     } catch {}
