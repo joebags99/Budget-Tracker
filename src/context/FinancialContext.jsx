@@ -23,6 +23,12 @@ function migrateExpenses(expenses) {
   }));
 }
 
+// Old app used Date.now() (number) as IDs. Normalize to strings so strict
+// equality comparisons work correctly after HTML select coerces values to strings.
+function migrateIds(items) {
+  return (items || []).map(item => ({ ...item, id: String(item.id) }));
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case 'ADD_PROJECT':
@@ -80,12 +86,12 @@ function reducer(state, action) {
     case 'IMPORT_ALL': {
       const imported = action.payload;
       return {
-        projects:     imported.projects     || [],
+        projects:     migrateIds(imported.projects),
         expenses:     migrateExpenses(imported.expenses || []),
-        payments:     imported.payments     || [],
-        taxPayments:  imported.taxPayments  || [],
-        supportPlans: imported.supportPlans || [],
-        clients:      imported.clients      || [],
+        payments:     migrateIds(imported.payments),
+        taxPayments:  migrateIds(imported.taxPayments),
+        supportPlans: migrateIds(imported.supportPlans),
+        clients:      migrateIds(imported.clients),
         taxRates:     imported.taxRates     || { ...DEFAULT_TAX_RATES },
       };
     }
@@ -119,12 +125,12 @@ export function FinancialProvider({ children }) {
       if (saved) {
         const data = JSON.parse(saved);
         return {
-          projects:     data.projects     || [],
+          projects:     migrateIds(data.projects),
           expenses:     migrateExpenses(data.expenses || []),
-          payments:     data.payments     || [],
-          taxPayments:  data.taxPayments  || [],
-          supportPlans: data.supportPlans || [],
-          clients:      data.clients      || [],
+          payments:     migrateIds(data.payments),
+          taxPayments:  migrateIds(data.taxPayments),
+          supportPlans: migrateIds(data.supportPlans),
+          clients:      migrateIds(data.clients),
           taxRates:     data.taxRates     || { ...DEFAULT_TAX_RATES },
         };
       }

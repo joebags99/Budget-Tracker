@@ -17,7 +17,7 @@ export default function ProjectsTable({ projects, onEdit, clients }) {
 
   function handlePaySubmit(e) {
     e.preventDefault();
-    const project = projects.find(p => p.id === payForm.projectId);
+    const project = projects.find(p => String(p.id) === String(payForm.projectId));
     if (!project || !payForm.amount || !payForm.date) {
       showToast('Select a project and enter payment details.', 'error');
       return;

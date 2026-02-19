@@ -16,7 +16,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
 
   function handlePaySubmit(e) {
     e.preventDefault();
-    const plan = supportPlans.find(p => p.id === payForm.planId);
+    const plan = supportPlans.find(p => String(p.id) === String(payForm.planId));
     if (!plan || !payForm.amount || !payForm.date) {
       showToast('Select a plan and enter payment details.', 'error');
       return;
