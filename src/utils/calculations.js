@@ -7,9 +7,11 @@ export const MEMBERS = [
 export const DISTRIBUTION_POOL_RATE = 0.4; // 40% of net profit goes to members
 export const BUSINESS_RESERVE_RATE  = 0.6; // 60% stays in business
 
+import { parseDate } from './dateUtils.js';
+
 export function calcRevenue(payments, fromDate, toDate) {
   const filtered = payments.filter(p => {
-    const d = new Date(p.date);
+    const d = parseDate(p.date);
     return d >= fromDate && d <= toDate;
   });
   const project = filtered.filter(p => p.type === 'project' || !p.type).reduce((s, p) => s + p.amount, 0);
@@ -19,7 +21,7 @@ export function calcRevenue(payments, fromDate, toDate) {
 
 export function calcExpenses(expenses, fromDate, toDate) {
   const filtered = expenses.filter(e => {
-    const d = new Date(e.date);
+    const d = parseDate(e.date);
     return d >= fromDate && d <= toDate;
   });
   return { total: filtered.reduce((s, e) => s + e.amount, 0), filtered };

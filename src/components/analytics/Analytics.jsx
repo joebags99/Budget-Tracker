@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import { formatCurrency } from '../../utils/dateUtils.js';
+import { formatCurrency, parseDate } from '../../utils/dateUtils.js';
 import { EXPENSE_CATEGORIES } from '../../utils/irsMapping.js';
 import {
   ResponsiveContainer,
@@ -64,10 +64,10 @@ export default function Analytics() {
   const revenueExpenseData = useMemo(() => {
     return months.map(m => {
       const rev = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
+        .filter(p => { const d = parseDate(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
         .reduce((s, p) => s + p.amount, 0);
       const exp = state.expenses
-        .filter(e => { const d = new Date(e.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
+        .filter(e => { const d = parseDate(e.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
         .reduce((s, e) => s + e.amount, 0);
       return { month: m.label, Revenue: rev, Expenses: exp, 'Net Profit': rev - exp };
     });
@@ -108,10 +108,10 @@ export default function Analytics() {
   const revenueSplitData = useMemo(() => {
     return months.map(m => {
       const proj = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && (p.type === 'project' || !p.type); })
+        .filter(p => { const d = parseDate(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && (p.type === 'project' || !p.type); })
         .reduce((s, p) => s + p.amount, 0);
       const supp = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && p.type === 'support'; })
+        .filter(p => { const d = parseDate(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && p.type === 'support'; })
         .reduce((s, p) => s + p.amount, 0);
       return { month: m.label, 'Project Revenue': proj, 'Support Revenue': supp };
     });
