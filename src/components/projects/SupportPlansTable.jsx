@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate, today } from '../../utils/dateUtils.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
   const { dispatch } = useFinancial();
@@ -44,8 +45,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
 
   return (
     <>
-      <div className="card">
-        <h3>Support Plans</h3>
+      <CollapsibleCard title="Support Plans">
         <div className="table-wrap">
           <table>
             <thead>
@@ -77,7 +77,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
             </tbody>
           </table>
         </div>
-      </div>
+      </CollapsibleCard>
 
       <div className="card">
         <h3>Record Support Payment</h3>

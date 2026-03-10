@@ -29,7 +29,7 @@ export default function Dashboard() {
   };
 
   const rev      = calcRevenue(state.payments,  fromDate, toDate);
-  const exp      = calcExpenses(state.expenses, fromDate, toDate);
+  const exp      = calcExpenses(state.expenses, fromDate, toDate, state.subscriptionCharges || []);
   const netProfit = rev.total - exp.total;
   const dist     = calcDistributions(netProfit);
   const tax      = {

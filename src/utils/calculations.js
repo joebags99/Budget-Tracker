@@ -19,11 +19,16 @@ export function calcRevenue(payments, fromDate, toDate) {
   return { project, support, total: project + support, filtered };
 }
 
-export function calcExpenses(expenses, fromDate, toDate) {
-  const filtered = expenses.filter(e => {
+export function calcExpenses(expenses, fromDate, toDate, subscriptionCharges = []) {
+  const filteredExp = expenses.filter(e => {
     const d = parseDate(e.date);
     return d >= fromDate && d <= toDate;
   });
+  const filteredCharges = subscriptionCharges.filter(c => {
+    const d = parseDate(c.date);
+    return d >= fromDate && d <= toDate;
+  });
+  const filtered = [...filteredExp, ...filteredCharges];
   return { total: filtered.reduce((s, e) => s + e.amount, 0), filtered };
 }
 

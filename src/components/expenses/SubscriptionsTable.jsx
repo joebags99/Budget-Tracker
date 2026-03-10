@@ -3,6 +3,7 @@ import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate, today } from '../../utils/dateUtils.js';
 import { EXPENSE_CATEGORIES } from '../../utils/irsMapping.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function SubscriptionsTable({ subscriptions, subscriptionCharges, onEdit }) {
   const { dispatch } = useFinancial();
@@ -61,17 +62,13 @@ export default function SubscriptionsTable({ subscriptions, subscriptionCharges,
 
   const sortedCharges = [...subscriptionCharges].sort((a, b) => new Date(b.date) - new Date(a.date));
 
+  const avgSummary = subscriptions.length > 0
+    ? <span style={{ fontSize: '0.9rem', color: '#555' }}>Avg Monthly Total: <strong style={{ color: '#FC7645' }}>{formatCurrency(totalAvgMonthly)}</strong></span>
+    : null;
+
   return (
     <>
-      <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <h3>Monthly Subscriptions</h3>
-          {subscriptions.length > 0 && (
-            <div style={{ fontSize: '0.9rem', color: '#555' }}>
-              Avg Monthly Total: <strong style={{ color: '#FC7645' }}>{formatCurrency(totalAvgMonthly)}</strong>
-            </div>
-          )}
-        </div>
+      <CollapsibleCard title="Monthly Subscriptions" headerRight={avgSummary}>
         <div className="table-wrap">
           <table>
             <thead>
@@ -117,7 +114,7 @@ export default function SubscriptionsTable({ subscriptions, subscriptionCharges,
             </tbody>
           </table>
         </div>
-      </div>
+      </CollapsibleCard>
 
       <div className="card">
         <h3>Record Monthly Charge</h3>
@@ -170,8 +167,7 @@ export default function SubscriptionsTable({ subscriptions, subscriptionCharges,
       </div>
 
       {sortedCharges.length > 0 && (
-        <div className="card">
-          <h3>Charge History</h3>
+        <CollapsibleCard title="Charge History" defaultOpen={false}>
           <div className="table-wrap">
             <table>
               <thead>
@@ -203,7 +199,7 @@ export default function SubscriptionsTable({ subscriptions, subscriptionCharges,
               </tbody>
             </table>
           </div>
-        </div>
+        </CollapsibleCard>
       )}
     </>
   );

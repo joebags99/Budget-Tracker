@@ -3,6 +3,7 @@ import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate, today } from '../../utils/dateUtils.js';
 import { getProjectTypeLabel } from '../../utils/calculations.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function ProjectsTable({ projects, onEdit, clients }) {
   const { dispatch } = useFinancial();
@@ -47,8 +48,7 @@ export default function ProjectsTable({ projects, onEdit, clients }) {
 
   return (
     <>
-      <div className="card">
-        <h3>Projects</h3>
+      <CollapsibleCard title="Projects">
         <div className="table-wrap">
           <table>
             <thead>
@@ -85,7 +85,7 @@ export default function ProjectsTable({ projects, onEdit, clients }) {
             </tbody>
           </table>
         </div>
-      </div>
+      </CollapsibleCard>
 
       <div className="card">
         <h3>Record Project Payment</h3>
