@@ -16,6 +16,7 @@ const initialState = {
   subscriptions: [],
   subscriptionCharges: [],
   taxRates: { ...DEFAULT_TAX_RATES },
+  mercurySavingsBalance: 0,
 };
 
 function migrateExpenses(expenses) {
@@ -126,6 +127,9 @@ function reducer(state, action) {
     case 'UPDATE_TAX_RATES':
       return { ...state, taxRates: { ...state.taxRates, ...action.payload } };
 
+    case 'SET_MERCURY_BALANCE':
+      return { ...state, mercurySavingsBalance: action.payload };
+
     case 'IMPORT_ALL': {
       const imported = action.payload;
       return {
@@ -138,6 +142,7 @@ function reducer(state, action) {
         subscriptions:       migrateIds(imported.subscriptions),
         subscriptionCharges: migrateIds(imported.subscriptionCharges),
         taxRates:            imported.taxRates || { ...DEFAULT_TAX_RATES },
+        mercurySavingsBalance: imported.mercurySavingsBalance ?? 0,
       };
     }
 
@@ -179,6 +184,7 @@ export function FinancialProvider({ children }) {
           subscriptions:       migrateIds(data.subscriptions),
           subscriptionCharges: migrateIds(data.subscriptionCharges),
           taxRates:            data.taxRates || { ...DEFAULT_TAX_RATES },
+          mercurySavingsBalance: data.mercurySavingsBalance ?? 0,
         };
       }
     } catch {}

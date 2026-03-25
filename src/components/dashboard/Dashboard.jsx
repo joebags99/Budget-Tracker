@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcOverhead } from '../../utils/calculations.js';
+import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcOverhead, CCC_LEGACY_CLIENT } from '../../utils/calculations.js';
 import { getQuickDateRange, toDateString } from '../../utils/dateUtils.js';
 import DateFilter          from './DateFilter.jsx';
 import MetricsGrid         from './MetricsGrid.jsx';
@@ -31,7 +31,16 @@ export default function Dashboard() {
   const rev      = calcRevenue(state.payments,  fromDate, toDate);
   const exp      = calcExpenses(state.expenses, fromDate, toDate, state.subscriptionCharges || []);
   const netProfit = rev.total - exp.total;
-  const dist     = calcDistributions(netProfit);
+
+  const cccLegacyRevenue = rev.filtered
+    .filter(p => p.clientName === CCC_LEGACY_CLIENT)
+    .reduce((s, p) => s + p.amount, 0);
+
+  const dist = calcDistributions(netProfit, {
+    cccLegacyRevenue,
+    mercuryBalance: state.mercurySavingsBalance || 0,
+    periodEndDate: dateRange.to,
+  });
   const tax      = {
     ...calcTax(netProfit, rates.federal, rates.state, rates.selfEmployment),
     federalRate: rates.federal,
@@ -59,8 +68,13 @@ export default function Dashboard() {
         distributionPool={dist.pool}
       />
       <OverheadComparison data={overhead} />
-      <MemberDistributions memberAmounts={dist.memberAmounts} reserve={dist.reserve} />
-      <TaxSummary tax={tax} reserve={dist.reserve} />
+      <MemberDistributions
+        memberAmounts={dist.memberAmounts}
+        savings={dist.savings}
+        floorWithholding={dist.floorWithholding}
+        mercuryBalance={state.mercurySavingsBalance || 0}
+      />
+      <TaxSummary tax={tax} savings={dist.savings} />
     </div>
   );
 }

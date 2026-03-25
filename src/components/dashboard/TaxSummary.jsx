@@ -1,6 +1,6 @@
 import { formatCurrency } from '../../utils/dateUtils.js';
 
-export default function TaxSummary({ tax, reserve }) {
+export default function TaxSummary({ tax, savings }) {
   return (
     <div className="card">
       <h3>Tax Summary (Estimates)</h3>
@@ -18,8 +18,8 @@ export default function TaxSummary({ tax, reserve }) {
           <div className="value">{formatCurrency(tax.selfEmployment)}</div>
         </div>
         <div className="metric-card metric-gold">
-          <h4>Business Reserve (60%)</h4>
-          <div className="value">{formatCurrency(reserve)}</div>
+          <h4>Retained Savings (10%)</h4>
+          <div className="value">{formatCurrency(savings)}</div>
         </div>
       </div>
       <p style={{ marginTop: 12, fontSize: '0.82rem', color: '#888', fontStyle: 'italic' }}>

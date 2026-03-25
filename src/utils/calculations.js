@@ -1,11 +1,24 @@
+// Ownership shares — used for K-1 tax allocation and legacy CCC payout splits
 export const MEMBERS = [
   { id: 'jon',  name: 'Jonathan Bartholomew',     share: 0.35 },
   { id: 'alex', name: 'Alejandro Marquez Grande', share: 0.33 },
   { id: 'joe',  name: 'Joseph Konkle',            share: 0.32 },
 ];
 
-export const DISTRIBUTION_POOL_RATE = 0.4; // 40% of net profit goes to members
-export const BUSINESS_RESERVE_RATE  = 0.6; // 60% stays in business
+// Payout splits effective April 1 2026 — applies to all revenue EXCEPT CCC Legacy
+export const PAYOUT_SPLITS_V2 = [
+  { id: 'alex', name: 'Alejandro Marquez Grande', share: 0.40 },
+  { id: 'joe',  name: 'Joseph Konkle',            share: 0.35 },
+  { id: 'jon',  name: 'Jonathan Bartholomew',     share: 0.25 },
+];
+
+export const DISTRIBUTION_POOL_RATE  = 0.9;  // 90% of net profit paid out to members
+export const SAVINGS_RETENTION_RATE  = 0.1;  // 10% retained in Mercury savings
+export const MERCURY_FLOOR           = 1500; // Minimum Mercury savings balance ($)
+export const NEW_SPLITS_EFFECTIVE    = new Date(2026, 3, 1); // April 1, 2026
+
+// clientName value that identifies CCC Legacy payments
+export const CCC_LEGACY_CLIENT = 'CCC Legacy';
 
 import { parseDate } from './dateUtils.js';
 
@@ -32,11 +45,56 @@ export function calcExpenses(expenses, fromDate, toDate, subscriptionCharges = [
   return { total: filtered.reduce((s, e) => s + e.amount, 0), filtered };
 }
 
-export function calcDistributions(netProfit) {
-  const pool = netProfit * DISTRIBUTION_POOL_RATE;
-  const reserve = netProfit * BUSINESS_RESERVE_RATE;
-  const memberAmounts = MEMBERS.map(m => ({ ...m, amount: pool * m.share }));
-  return { pool, reserve, memberAmounts };
+/**
+ * Calculate profit distributions.
+ *
+ * Options:
+ *   cccLegacyRevenue  – revenue from CCC Legacy client (uses original MEMBERS splits)
+ *   mercuryBalance    – current Mercury savings balance; floor is replenished first
+ *   periodEndDate     – ISO date string; if >= April 1 2026 the new V2 splits apply
+ */
+export function calcDistributions(netProfit, { cccLegacyRevenue = 0, mercuryBalance = 0, periodEndDate = null } = {}) {
+  const useNewSplits = !periodEndDate || new Date(periodEndDate) >= NEW_SPLITS_EFFECTIVE;
+
+  if (netProfit <= 0) {
+    const splits = useNewSplits ? PAYOUT_SPLITS_V2 : MEMBERS;
+    return { pool: 0, savings: 0, floorWithholding: 0, memberAmounts: splits.map(m => ({ ...m, amount: 0 })) };
+  }
+
+  const rawPool = netProfit * DISTRIBUTION_POOL_RATE;
+  const savings = netProfit * SAVINGS_RETENTION_RATE;
+
+  // Withhold from payout to bring Mercury savings up to the $1,500 floor
+  const floorDeficit    = Math.max(0, MERCURY_FLOOR - mercuryBalance);
+  const floorWithholding = Math.min(floorDeficit, rawPool);
+  const availablePool   = rawPool - floorWithholding;
+
+  let memberAmounts;
+  if (!useNewSplits) {
+    // Before April 2026 — original splits for everything
+    memberAmounts = MEMBERS.map(m => ({ ...m, amount: availablePool * m.share }));
+  } else if (cccLegacyRevenue > 0 && cccLegacyRevenue < netProfit) {
+    // Mixed: portion of pool belongs to CCC Legacy (old splits), rest gets new splits
+    const cccFraction = cccLegacyRevenue / netProfit;
+    const cccPool     = availablePool * cccFraction;
+    const otherPool   = availablePool * (1 - cccFraction);
+
+    const totals = {};
+    MEMBERS.forEach(m => { totals[m.id] = { ...m, amount: cccPool * m.share }; });
+    PAYOUT_SPLITS_V2.forEach(m => {
+      if (totals[m.id]) totals[m.id].amount += otherPool * m.share;
+      else totals[m.id] = { ...m, amount: otherPool * m.share };
+    });
+    memberAmounts = Object.values(totals);
+  } else if (cccLegacyRevenue >= netProfit) {
+    // All revenue is CCC Legacy — original splits
+    memberAmounts = MEMBERS.map(m => ({ ...m, amount: availablePool * m.share }));
+  } else {
+    // No CCC Legacy revenue — new splits
+    memberAmounts = PAYOUT_SPLITS_V2.map(m => ({ ...m, amount: availablePool * m.share }));
+  }
+
+  return { pool: availablePool, savings, floorWithholding, memberAmounts };
 }
 
 export function calcTax(netProfit, federalRate, stateRate, selfEmploymentRate) {
