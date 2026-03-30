@@ -54,9 +54,12 @@ export default function CoOwnerReport() {
     const byClient = {};
     rev.filtered.forEach(p => { byClient[p.clientName] = (byClient[p.clientName] || 0) + p.amount; });
 
-    // Expenses by category
+    // Expenses by category (resolve subscription charges via their parent subscription)
     const byCategory = {};
-    exp.filtered.forEach(e => { byCategory[e.category] = (byCategory[e.category] || 0) + e.amount; });
+    exp.filtered.forEach(e => {
+      const cat = e.category || (state.subscriptions || []).find(s => String(s.id) === String(e.subscriptionId))?.category || 'other';
+      byCategory[cat] = (byCategory[cat] || 0) + e.amount;
+    });
 
     const periodLabel = PERIOD_PRESETS.find(p => p.id === period)?.label || 'Custom Range';
     setReport({ rev, exp, net, dist, tax, mrr, byClient, byCategory, periodLabel, generatedAt: new Date() });
