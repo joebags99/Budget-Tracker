@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcOverhead, CCC_LEGACY_CLIENT } from '../../utils/calculations.js';
+import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcOverhead } from '../../utils/calculations.js';
 import { getQuickDateRange, toDateString } from '../../utils/dateUtils.js';
 import DateFilter          from './DateFilter.jsx';
 import MetricsGrid         from './MetricsGrid.jsx';
@@ -33,7 +33,7 @@ export default function Dashboard() {
   const netProfit = rev.total - exp.total;
 
   const cccLegacyRevenue = rev.filtered
-    .filter(p => p.clientName === CCC_LEGACY_CLIENT)
+    .filter(p => p.useLegacySplit === true)
     .reduce((s, p) => s + p.amount, 0);
 
   const dist = calcDistributions(netProfit, {

@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate, today } from '../../utils/dateUtils.js';
-import { getProjectTypeLabel } from '../../utils/calculations.js';
+import { getProjectTypeLabel, CCC_LEGACY_CLIENT } from '../../utils/calculations.js';
 import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function ProjectsTable({ projects, onEdit, clients }) {
   const { dispatch } = useFinancial();
   const showToast = useAppToast();
-  const [payForm, setPayForm] = useState({ projectId: '', amount: '', date: today(), notes: '' });
+  const [payForm, setPayForm] = useState({ projectId: '', amount: '', date: today(), notes: '', useLegacySplit: false });
 
   function handleDelete(id) {
     if (!confirm('Delete this project?')) return;
@@ -34,11 +34,11 @@ export default function ProjectsTable({ projects, onEdit, clients }) {
       payload: {
         projectId: project.id,
         amount,
-        paymentData: { clientName: project.clientName, date: payForm.date, notes: payForm.notes },
+        paymentData: { clientName: project.clientName, date: payForm.date, notes: payForm.notes, useLegacySplit: payForm.useLegacySplit },
       },
     });
     showToast('Project payment recorded.', 'success');
-    setPayForm({ projectId: '', amount: '', date: today(), notes: '' });
+    setPayForm({ projectId: '', amount: '', date: today(), notes: '', useLegacySplit: false });
   }
 
   const statusBadge = s => {
@@ -114,6 +114,18 @@ export default function ProjectsTable({ projects, onEdit, clients }) {
               <input type="text" value={payForm.notes} onChange={e => setPayForm(f => ({ ...f, notes: e.target.value }))} placeholder="Optional notes" />
             </div>
           </div>
+          {projects.find(p => String(p.id) === String(payForm.projectId))?.clientName === CCC_LEGACY_CLIENT && (
+            <div style={{ padding: '10px 14px', background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 6, marginBottom: 12 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.9rem' }}>
+                <input
+                  type="checkbox"
+                  checked={payForm.useLegacySplit}
+                  onChange={e => setPayForm(f => ({ ...f, useLegacySplit: e.target.checked }))}
+                />
+                Use legacy ownership split (Jon 35%, Alejandro 33%, Joe 32%) — for original contract installments only
+              </label>
+            </div>
+          )}
           <div className="form-actions">
             <button type="submit" className="btn">Record Payment</button>
           </div>

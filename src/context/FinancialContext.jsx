@@ -32,6 +32,33 @@ function migrateIds(items) {
   return (items || []).map(item => ({ ...item, id: String(item.id) }));
 }
 
+// Auto-detect which historical CCC Legacy payments should use the old ownership splits.
+// Rules: first 2 project payments (by date) + first support payment per supportPlanId.
+// Payments that already have useLegacySplit set are left untouched.
+function migrateLegacySplits(payments) {
+  const needsMigration = payments.some(p => p.useLegacySplit === undefined);
+  if (!needsMigration) return payments;
+
+  const sorted = [...payments].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const cccProject = sorted.filter(p => p.clientName === 'CCC Legacy' && (p.type === 'project' || !p.type));
+  const cccSupport = sorted.filter(p => p.clientName === 'CCC Legacy' && p.type === 'support');
+
+  const legacyIds = new Set();
+  cccProject.slice(0, 2).forEach(p => legacyIds.add(p.id));
+  const seenPlans = new Set();
+  cccSupport.forEach(p => {
+    if (p.supportPlanId && !seenPlans.has(p.supportPlanId)) {
+      seenPlans.add(p.supportPlanId);
+      legacyIds.add(p.id);
+    }
+  });
+
+  return payments.map(p => ({
+    ...p,
+    useLegacySplit: p.useLegacySplit !== undefined ? p.useLegacySplit : legacyIds.has(p.id),
+  }));
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case 'ADD_PROJECT':
@@ -135,7 +162,7 @@ function reducer(state, action) {
       return {
         projects:            migrateIds(imported.projects),
         expenses:            migrateExpenses(imported.expenses || []),
-        payments:            migrateIds(imported.payments),
+        payments:            migrateLegacySplits(migrateIds(imported.payments)),
         taxPayments:         migrateIds(imported.taxPayments),
         supportPlans:        migrateIds(imported.supportPlans),
         clients:             migrateIds(imported.clients),
@@ -177,7 +204,7 @@ export function FinancialProvider({ children }) {
         return {
           projects:            migrateIds(data.projects),
           expenses:            migrateExpenses(data.expenses || []),
-          payments:            migrateIds(data.payments),
+          payments:            migrateLegacySplits(migrateIds(data.payments)),
           taxPayments:         migrateIds(data.taxPayments),
           supportPlans:        migrateIds(data.supportPlans),
           clients:             migrateIds(data.clients),

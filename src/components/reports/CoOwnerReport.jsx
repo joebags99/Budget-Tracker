@@ -40,7 +40,7 @@ export default function CoOwnerReport() {
     const exp  = calcExpenses(state.expenses, from, to, state.subscriptionCharges || []);
     const net  = rev.total - exp.total;
     const cccLegacyRevenue = rev.filtered
-      .filter(p => p.clientName === CCC_LEGACY_CLIENT)
+      .filter(p => p.useLegacySplit === true)
       .reduce((s, p) => s + p.amount, 0);
     const dist = calcDistributions(net, {
       cccLegacyRevenue,
