@@ -1,0 +1,1695 @@
+{
+  "version": "2.0",
+  "exportDate": "2026-04-21T15:31:31.705Z",
+  "projects": [
+    {
+      "id": "1758127423746",
+      "clientName": "Heroes Journey",
+      "projectType": "custom",
+      "totalAmount": 1,
+      "startDate": "2025-07-01",
+      "paymentSchedule": "full",
+      "status": "completed",
+      "paidAmount": 1
+    },
+    {
+      "id": "1758127882447",
+      "clientName": "Mount Herritage Bar & Grill",
+      "projectType": "custom",
+      "totalAmount": 1,
+      "startDate": "2025-06-27",
+      "paymentSchedule": "full",
+      "status": "completed",
+      "paidAmount": 1
+    },
+    {
+      "id": "1758128043081",
+      "clientName": "Radical Movers",
+      "projectType": "custom",
+      "totalAmount": 1300,
+      "startDate": "2025-06-03",
+      "paymentSchedule": "2payments",
+      "status": "completed",
+      "paidAmount": 1300
+    },
+    {
+      "id": "1758128133743",
+      "clientName": "Liberty Kabob",
+      "projectType": "basic",
+      "totalAmount": 750,
+      "startDate": "2025-07-25",
+      "paymentSchedule": "2payments",
+      "status": "completed",
+      "paidAmount": 750
+    },
+    {
+      "id": "1758128229817",
+      "clientName": "Poppy's Dust",
+      "projectType": "custom",
+      "totalAmount": 3500,
+      "startDate": "2025-09-10",
+      "paymentSchedule": "2payments",
+      "status": "completed",
+      "paidAmount": 3500
+    },
+    {
+      "id": "1758128273870",
+      "clientName": "Little Cheese LLC",
+      "projectType": "custom",
+      "totalAmount": 1500,
+      "startDate": "2025-09-15",
+      "paymentSchedule": "3payments",
+      "status": "completed",
+      "paidAmount": 1500
+    },
+    {
+      "id": "1760579621936",
+      "clientName": "PJ Design",
+      "projectType": "custom",
+      "totalAmount": 850,
+      "startDate": "2025-10-17",
+      "paymentSchedule": "2payments",
+      "status": "completed",
+      "paidAmount": 850
+    },
+    {
+      "clientName": "Flour to Fork",
+      "projectType": "custom",
+      "totalAmount": 500,
+      "paidAmount": 500,
+      "startDate": "2025-10-31",
+      "paymentSchedule": "2pay",
+      "status": "completed",
+      "notes": "",
+      "id": "1771534114458bk6k5clkglj"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "projectType": "custom",
+      "totalAmount": 1750,
+      "paidAmount": 1750,
+      "startDate": "2026-02-16",
+      "paymentSchedule": "2pay",
+      "status": "completed",
+      "notes": "",
+      "id": "1771536491178uxigibaa2c"
+    },
+    {
+      "clientName": "CCC Legacy",
+      "projectType": "custom",
+      "totalAmount": 25300,
+      "paidAmount": 16970,
+      "startDate": "2026-03-10",
+      "paymentSchedule": "3pay",
+      "status": "active",
+      "notes": "This Includes CRM and Site Redesign",
+      "id": "1773157619869j11prx6avj"
+    }
+  ],
+  "expenses": [
+    {
+      "id": 1766413747583,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-12-15",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1766413784349,
+      "description": "Google Workspace",
+      "amount": 33,
+      "date": "2025-12-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1766413876973,
+      "description": "Server Cost",
+      "amount": 20,
+      "date": "2025-12-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1766413735624,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-11-15",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1766413772957,
+      "description": "Google Workspace",
+      "amount": 33,
+      "date": "2025-11-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1766413824380,
+      "description": "Server Cost",
+      "amount": 5,
+      "date": "2025-11-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1761758580463,
+      "description": "Annual Claude Subscription",
+      "amount": 200,
+      "date": "2025-10-29",
+      "category": "software",
+      "vendor": "Claude Inc",
+      "recurring": "annually",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1761681892404,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-10-15",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1761681984801,
+      "description": "Google Workspace\t",
+      "amount": 26,
+      "date": "2025-10-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1761682000313,
+      "description": "Server Cost",
+      "amount": 5,
+      "date": "2025-10-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758128986273,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-09-15",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758126387137,
+      "description": "Google Workspace",
+      "amount": 26,
+      "date": "2025-09-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758126448838,
+      "description": "Server Cost",
+      "amount": 5,
+      "date": "2025-09-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129645707,
+      "description": "Paid Joe for Photoshop Skills",
+      "amount": 30,
+      "date": "2025-09-01",
+      "category": "professional",
+      "vendor": "Joseph Konkle",
+      "recurring": "no",
+      "irsLine": "Line 20 — Legal and Professional Fees"
+    },
+    {
+      "id": 1758128972133,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-08-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758126559649,
+      "description": "Posters for Event",
+      "amount": 43.15,
+      "date": "2025-08-03",
+      "category": "marketing",
+      "vendor": "Staples Warehouse",
+      "recurring": "no",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "id": 1758129094397,
+      "description": "Google Workspace\t",
+      "amount": 25.2,
+      "date": "2025-08-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129189102,
+      "description": "Server Cost",
+      "amount": 4.73,
+      "date": "2025-08-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758126608109,
+      "description": "Chamber of Commerce Membership Fee",
+      "amount": 100,
+      "date": "2025-07-29",
+      "category": "other",
+      "vendor": "Shenandoah County",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions"
+    },
+    {
+      "id": 1758128956848,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-07-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129170501,
+      "description": "Server Cost",
+      "amount": 4.62,
+      "date": "2025-07-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129068546,
+      "description": "Google Workspace\t",
+      "amount": 25.2,
+      "date": "2025-07-01",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758128899778,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-06-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129049023,
+      "description": "Google Workspace\t",
+      "amount": 21,
+      "date": "2025-06-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "id": 1758129145606,
+      "description": "Server Cost",
+      "amount": 18.74,
+      "date": "2025-06-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Google Workspace",
+      "amount": 33.6,
+      "date": "2026-01-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "id": "1771533492892qd3rwrxvcc",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Server Cost",
+      "amount": 36.28,
+      "date": "2026-01-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "no",
+      "id": "17715335293469ca2wvro8r9",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "DocuSign Membership",
+      "amount": 15,
+      "date": "2026-01-14",
+      "category": "software",
+      "vendor": "DocuSign",
+      "recurring": "no",
+      "id": "1771533573543vzysa8bmj4",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "TaxAct Filing Fee",
+      "amount": 164.98,
+      "date": "2026-01-28",
+      "category": "software",
+      "vendor": "TaxAct",
+      "recurring": "no",
+      "id": "1771533667708fgf3ai80f7a",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Google Workspace",
+      "amount": 33.6,
+      "date": "2026-02-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "id": "17715337548300eqqusi4nz05",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Server Cost",
+      "amount": 6.28,
+      "date": "2026-02-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "no",
+      "id": "1771533777962bhiyb6swkw",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "DocuSign Membership",
+      "amount": 15,
+      "date": "2026-02-14",
+      "category": "software",
+      "vendor": "DocuSign",
+      "recurring": "no",
+      "id": "1771533812116jkp3pkodssr",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Virginia LLC Membership Payment",
+      "amount": 50,
+      "date": "2026-02-27",
+      "category": "taxes",
+      "vendor": "Virginia SCC",
+      "recurring": "annually",
+      "id": "1773158158386t2vntrjk0ug",
+      "irsLine": "Line 14 — Taxes and Licenses"
+    },
+    {
+      "description": "Business Cards",
+      "amount": 46.31,
+      "date": "2026-03-24",
+      "category": "marketing",
+      "vendor": "Vistaprint",
+      "recurring": "no",
+      "id": "1774459438911ey8vsa0gknc",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 2,
+      "date": "2026-03-12",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459484472pvq7zprlnu8",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 9,
+      "date": "2026-03-13",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "17744594993332tx00z46s0b",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 3,
+      "date": "2026-03-14",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "17744595401225vcxvd4vp2b",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 8,
+      "date": "2026-03-15",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "17744595568804819gb4950b",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 4,
+      "date": "2026-03-16",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459585661vbdjefjumn",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Go Daddy Hosting for CCC Legacy",
+      "amount": 26.99,
+      "date": "2026-03-17",
+      "category": "software",
+      "vendor": "GoDaddy",
+      "recurring": "no",
+      "id": "1774459643108un4vuf278kp",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 5,
+      "date": "2026-03-17",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459658195ai6rj12p724",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 5,
+      "date": "2026-03-18",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459677533x1ubytmrm1k",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 9,
+      "date": "2026-03-20",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459760615txbj8o354",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 9,
+      "date": "2026-03-22",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774459774845szfvlfd8xn",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 9,
+      "date": "2026-03-23",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "17744597967768vw8bw6tqnw",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 9,
+      "date": "2026-03-25",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "17744598108030ou75a3sr5j9",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 14,
+      "date": "2026-03-28",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "17748722670536zg93r6a84q",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 14,
+      "date": "2026-03-31",
+      "category": "marketing",
+      "vendor": "Facebook",
+      "recurring": "no",
+      "id": "1774872302216jc42b9e2u7",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "GoDaddy",
+      "amount": 29.99,
+      "date": "2026-04-02",
+      "category": "software",
+      "vendor": "",
+      "recurring": "no",
+      "id": "17767847871163k6wlabmm5r",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 13.99,
+      "date": "2026-04-03",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "17767848606136592i7umpzd",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 14,
+      "date": "2026-04-06",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "1776784911909noe0wdr1wm",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Artist Commission",
+      "amount": 60,
+      "date": "2026-04-06",
+      "category": "professional",
+      "vendor": "",
+      "recurring": "no",
+      "id": "17767849660151h0twm21ucj",
+      "irsLine": "Line 20 — Legal and Professional Fees"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 4.58,
+      "date": "2026-04-07",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "17767850380664rinzk0ys86",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 5.45,
+      "date": "2026-04-08",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "177678508371603bj0mn1hkmd",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 5.08,
+      "date": "2026-04-09",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "1776785102726vo5ow0zj4dn",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "Video Editor Commission ",
+      "amount": 150,
+      "date": "2026-04-09",
+      "category": "professional",
+      "vendor": "Ruben Royal",
+      "recurring": "no",
+      "id": "1776785140570286q9ndk50p",
+      "irsLine": "Line 20 — Legal and Professional Fees"
+    },
+    {
+      "description": "Meta Ads",
+      "amount": 4.71,
+      "date": "2026-04-10",
+      "category": "marketing",
+      "vendor": "",
+      "recurring": "no",
+      "id": "1776785162192klkv4bf3r",
+      "irsLine": "Line 20a — Advertising"
+    },
+    {
+      "description": "GoDaddy",
+      "amount": 26.99,
+      "date": "2026-04-17",
+      "category": "software",
+      "vendor": "",
+      "recurring": "no",
+      "id": "1776785224047vv6sm4bg09",
+      "irsLine": "Line 20 — Other Deductions - Software/SaaS"
+    }
+  ],
+  "payments": [
+    {
+      "id": "1758127439177",
+      "projectId": 1758127423746,
+      "amount": 1,
+      "date": "2025-07-01",
+      "clientName": "Heroes Journey",
+      "type": "project"
+    },
+    {
+      "id": "1758127551006",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-05-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-05"
+    },
+    {
+      "id": "1758127566288",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-06-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-06"
+    },
+    {
+      "id": "1758127580679",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-07-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-07"
+    },
+    {
+      "id": "1758127593043",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-08-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-08"
+    },
+    {
+      "id": "1758127602450",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-09-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-09"
+    },
+    {
+      "id": "1758127893859",
+      "projectId": 1758127882447,
+      "amount": 1,
+      "date": "2025-06-27",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "project"
+    },
+    {
+      "id": "1758127955882",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-07-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-07"
+    },
+    {
+      "id": "1758127971599",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-08-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-08"
+    },
+    {
+      "id": "1758127979717",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-09-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-09"
+    },
+    {
+      "id": "1758128084062",
+      "projectId": 1758128043081,
+      "amount": 650,
+      "date": "2025-08-05",
+      "clientName": "Radical Movers",
+      "type": "project"
+    },
+    {
+      "id": "1758128163216",
+      "projectId": 1758128133743,
+      "amount": 375,
+      "date": "2025-07-25",
+      "clientName": "Liberty Kabob",
+      "type": "project"
+    },
+    {
+      "id": "1758128308644",
+      "projectId": 1758128229817,
+      "amount": 1750,
+      "date": "2025-09-15",
+      "clientName": "Poppy's Dust",
+      "type": "project"
+    },
+    {
+      "id": "1758128334051",
+      "projectId": 1758128273870,
+      "amount": 750,
+      "date": "2025-09-15",
+      "clientName": "Little Cheese LLC",
+      "type": "project"
+    },
+    {
+      "id": "1760579643389",
+      "projectId": 1760579621936,
+      "amount": 425,
+      "date": "2025-10-17",
+      "clientName": "PJ Design",
+      "type": "project"
+    },
+    {
+      "id": "1761218053272",
+      "projectId": 1758128133743,
+      "amount": 375,
+      "date": "2025-09-18",
+      "clientName": "Liberty Kabob",
+      "type": "project"
+    },
+    {
+      "id": "1761218120815",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-10-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-10"
+    },
+    {
+      "id": "1761758823709",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-10-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-10"
+    },
+    {
+      "id": "1766413386602",
+      "projectId": 1758128043081,
+      "amount": 650,
+      "date": "2025-11-25",
+      "clientName": "Radical Movers",
+      "type": "project"
+    },
+    {
+      "id": "1766413396529",
+      "projectId": 1758128273870,
+      "amount": 750,
+      "date": "2025-12-22",
+      "clientName": "Little Cheese LLC",
+      "type": "project"
+    },
+    {
+      "id": "1766413408676",
+      "projectId": 1760579621936,
+      "amount": 425,
+      "date": "2025-12-20",
+      "clientName": "PJ Design",
+      "type": "project"
+    },
+    {
+      "id": "1766413476791",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-11-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-11"
+    },
+    {
+      "id": "1766413487262",
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-12-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-12"
+    },
+    {
+      "id": "1766413512723",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-11-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-11"
+    },
+    {
+      "id": "1766413526841",
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-12-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-12"
+    },
+    {
+      "clientName": "Flour to Fork",
+      "date": "2025-10-31",
+      "notes": "",
+      "id": "1771534197054pq091nlo7s",
+      "projectId": "1771534114458bk6k5clkglj",
+      "type": "project",
+      "amount": 250
+    },
+    {
+      "clientName": "Flour to Fork",
+      "date": "2026-01-08",
+      "notes": "",
+      "id": "177153421582258djrzky9d8",
+      "projectId": "1771534114458bk6k5clkglj",
+      "type": "project",
+      "amount": 250
+    },
+    {
+      "clientName": "Mount Herritage Bar & Grill",
+      "amount": 50,
+      "date": "2026-01-01",
+      "notes": "",
+      "supportPlanId": "1758127937612",
+      "id": "1771536255435ccrx9hb74rb",
+      "type": "support"
+    },
+    {
+      "clientName": "Heroes Journey",
+      "amount": 110,
+      "date": "2026-01-03",
+      "notes": "",
+      "supportPlanId": "1758127522240",
+      "id": "1771536286860szs62ilhwg",
+      "type": "support"
+    },
+    {
+      "clientName": "PJ Design",
+      "amount": 50,
+      "date": "2026-01-10",
+      "notes": "",
+      "supportPlanId": "1761757548298",
+      "id": "1771536319928p45dci9ejs",
+      "type": "support"
+    },
+    {
+      "clientName": "Little Cheese LLC",
+      "amount": 50,
+      "date": "2026-01-16",
+      "notes": "",
+      "supportPlanId": "1758128489755",
+      "id": "1771536333541r32n57lj68o",
+      "type": "support"
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-01-16",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "1771536350959wc876twujg",
+      "type": "support"
+    },
+    {
+      "clientName": "Heroes Journey",
+      "amount": 20,
+      "date": "2026-01-18",
+      "notes": "",
+      "supportPlanId": "1758127522240",
+      "id": "1771536367447pamkn0wz6ig",
+      "type": "support"
+    },
+    {
+      "clientName": "PJ Design",
+      "amount": 50,
+      "date": "2026-02-01",
+      "notes": "",
+      "supportPlanId": "1761757548298",
+      "id": "1771536382648zkn4kh219g",
+      "type": "support"
+    },
+    {
+      "clientName": "Little Cheese LLC",
+      "amount": 50,
+      "date": "2026-02-01",
+      "notes": "",
+      "supportPlanId": "1758128489755",
+      "id": "1771536397924nm37ivagm2a",
+      "type": "support"
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-02-02",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "1771536411659tfetzh5ns",
+      "type": "support"
+    },
+    {
+      "clientName": "Mount Herritage Bar & Grill",
+      "amount": 50,
+      "date": "2026-02-15",
+      "notes": "",
+      "supportPlanId": "1758127937612",
+      "id": "1771536432663vphszny2f18",
+      "type": "support"
+    },
+    {
+      "clientName": "Heroes Journey",
+      "amount": 20,
+      "date": "2026-02-16",
+      "notes": "",
+      "supportPlanId": "1758127522240",
+      "id": "1771536450523ke9bm75l1b",
+      "type": "support"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "date": "2026-02-16",
+      "notes": "",
+      "id": "1771536510146bftoq3cp44c",
+      "projectId": "1771536491178uxigibaa2c",
+      "type": "project",
+      "amount": 875
+    },
+    {
+      "clientName": "Poppy's Dust",
+      "date": "2026-02-19",
+      "notes": "",
+      "id": "1771536520968nn6i16mr26",
+      "projectId": "1758128229817",
+      "type": "project",
+      "amount": 1750
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-02-18",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "1771536542635h86osu4apt",
+      "type": "support"
+    },
+    {
+      "clientName": "PJ Design",
+      "amount": 50,
+      "date": "2026-03-01",
+      "notes": "",
+      "supportPlanId": "1761757548298",
+      "id": "1772638476806tq48xpaswcn",
+      "type": "support"
+    },
+    {
+      "clientName": "Little Cheese LLC",
+      "amount": 50,
+      "date": "2026-03-01",
+      "notes": "",
+      "supportPlanId": "1758128489755",
+      "id": "1772638490657jcnfzutvaeo",
+      "type": "support"
+    },
+    {
+      "clientName": "Mount Herritage Bar & Grill",
+      "amount": 50,
+      "date": "2026-03-01",
+      "notes": "",
+      "supportPlanId": "1758127937612",
+      "id": "1772638505528om4api13jv8",
+      "type": "support"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "date": "2026-03-09",
+      "notes": "",
+      "id": "1773064483911r0y99wi7w3",
+      "projectId": "1771536491178uxigibaa2c",
+      "type": "project",
+      "amount": 875
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "amount": 49.97,
+      "date": "2026-03-09",
+      "notes": "Prorated amount for March. ",
+      "supportPlanId": "177282585800345b8nwq1jk9",
+      "id": "1773064673710i0am7k7ul6",
+      "type": "support"
+    },
+    {
+      "clientName": "CCC Legacy",
+      "date": "2026-03-16",
+      "notes": "",
+      "id": "177315764461366dzp0jksxs",
+      "projectId": "1773157619869j11prx6avj",
+      "type": "project",
+      "amount": 7140
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-03-11",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "1773313378652x120x2m1hch",
+      "type": "support"
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-03-11",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "1773313389147zoxn7vzli7",
+      "type": "support"
+    },
+    {
+      "clientName": "Heroes Journey",
+      "amount": 20,
+      "date": "2026-03-16",
+      "notes": "",
+      "supportPlanId": "1758127522240",
+      "id": "1773690403763o5luvocqidi",
+      "type": "support"
+    },
+    {
+      "clientName": "Ducco HVAC",
+      "amount": 25,
+      "date": "2026-03-22",
+      "notes": "",
+      "supportPlanId": "1771533938609vo1xazonsdd",
+      "id": "1774872357982e8a13isp4nb",
+      "type": "support"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "amount": 50,
+      "date": "2026-03-26",
+      "notes": "",
+      "supportPlanId": "177282585800345b8nwq1jk9",
+      "id": "17748723704190ylvgmodx7",
+      "type": "support"
+    },
+    {
+      "clientName": "CCC Legacy",
+      "date": "2026-04-21",
+      "notes": "",
+      "id": "1776783853728gkur5mqmz2",
+      "projectId": "1773157619869j11prx6avj",
+      "type": "project",
+      "amount": 9830
+    },
+    {
+      "clientName": "PJ Design",
+      "amount": 50,
+      "date": "2026-04-01",
+      "notes": "",
+      "supportPlanId": "1761757548298",
+      "id": "1776783930339nkqkncb7yrl",
+      "type": "support"
+    },
+    {
+      "clientName": "Little Cheese LLC",
+      "amount": 50,
+      "date": "2026-04-01",
+      "notes": "",
+      "supportPlanId": "1758128489755",
+      "id": "1776783942388vk57c1gftv",
+      "type": "support"
+    },
+    {
+      "clientName": "Mount Herritage Bar & Grill",
+      "amount": 50,
+      "date": "2026-04-08",
+      "notes": "",
+      "supportPlanId": "1758127937612",
+      "id": "1776783954496wwjpkoegabd",
+      "type": "support"
+    },
+    {
+      "clientName": "Radical Movers",
+      "amount": 25,
+      "date": "2026-04-09",
+      "notes": "",
+      "supportPlanId": "1758128747005",
+      "id": "17767839751418dt250uuoa4",
+      "type": "support"
+    },
+    {
+      "clientName": "Heroes Journey",
+      "amount": 20,
+      "date": "2026-04-16",
+      "notes": "",
+      "supportPlanId": "1758127522240",
+      "id": "1776784000011o67im371psp",
+      "type": "support"
+    },
+    {
+      "clientName": "Ducco HVAC",
+      "amount": 25,
+      "date": "2026-04-18",
+      "notes": "",
+      "supportPlanId": "1771533938609vo1xazonsdd",
+      "id": "17767840168267gglib524gv",
+      "type": "support"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "amount": 50,
+      "date": "2026-04-26",
+      "notes": "",
+      "supportPlanId": "177282585800345b8nwq1jk9",
+      "id": "17767840879983wbm8iplqrs",
+      "type": "support"
+    },
+    {
+      "clientName": "CCC Legacy",
+      "amount": 127.27,
+      "date": "2026-04-21",
+      "notes": "",
+      "supportPlanId": "1776785356039jzplkpdw7p",
+      "id": "1776785371352pov7jgzxqm",
+      "type": "support"
+    }
+  ],
+  "taxPayments": [],
+  "supportPlans": [
+    {
+      "id": "1758127522240",
+      "clientName": "Heroes Journey",
+      "planType": "custom",
+      "monthlyAmount": 20,
+      "startDate": "2025-05-16",
+      "billingDay": 16,
+      "status": "active",
+      "services": "Hosting & SSL certificate, Core/plugin updates, Basic security monitoring",
+      "endDate": ""
+    },
+    {
+      "id": "1758127937612",
+      "clientName": "Mount Herritage Bar & Grill",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-07-01",
+      "billingDay": 1,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": "1758128489755",
+      "clientName": "Little Cheese LLC",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-11-01",
+      "billingDay": 1,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": "1758128747005",
+      "clientName": "Radical Movers",
+      "planType": "custom",
+      "monthlyAmount": 25,
+      "startDate": "2025-10-15",
+      "billingDay": 15,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": "1761757548298",
+      "clientName": "PJ Design",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-11-15",
+      "billingDay": 15,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "clientName": "Ducco HVAC",
+      "planType": "custom",
+      "monthlyAmount": 25,
+      "billingDay": 18,
+      "startDate": "2025-12-18",
+      "endDate": "",
+      "status": "active",
+      "services": "",
+      "id": "1771533938609vo1xazonsdd"
+    },
+    {
+      "clientName": "A&A Junk Removal",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "billingDay": 1,
+      "startDate": "2026-02-26",
+      "endDate": "",
+      "status": "active",
+      "services": "",
+      "id": "177282585800345b8nwq1jk9"
+    },
+    {
+      "clientName": "CCC Legacy",
+      "planType": "premium",
+      "monthlyAmount": 250,
+      "billingDay": 1,
+      "startDate": "2026-04-15",
+      "endDate": "",
+      "status": "active",
+      "services": "",
+      "id": "1776785356039jzplkpdw7p"
+    }
+  ],
+  "clients": [],
+  "subscriptions": [
+    {
+      "id": "1771537854063haqii0ou47",
+      "vendor": "G-Suite",
+      "category": "software",
+      "notes": ""
+    },
+    {
+      "id": "177153785503054tsfue6o33",
+      "vendor": "AWS",
+      "category": "software",
+      "notes": ""
+    },
+    {
+      "id": "1771537855820h9e93n3khys",
+      "vendor": "Docusign",
+      "category": "software",
+      "notes": ""
+    },
+    {
+      "vendor": "Github Organization",
+      "category": "software",
+      "notes": "",
+      "id": "1772638245890vqkfhnmkuvm"
+    },
+    {
+      "vendor": "Buffer",
+      "category": "marketing",
+      "notes": "Automated Social Media Posts",
+      "id": "1772638959055n988jqg7jcg"
+    },
+    {
+      "vendor": "Claude Code",
+      "category": "software",
+      "notes": "Alejandro ",
+      "id": "1773064596680ek70p9m97va"
+    },
+    {
+      "vendor": "Notes Bot io",
+      "category": "software",
+      "notes": "",
+      "id": "1774459722513jw6rd0a4jj"
+    }
+  ],
+  "subscriptionCharges": [
+    {
+      "id": "177153785406333q6d0gjsvi",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 33,
+      "date": "2025-12-02",
+      "notes": "Google Workspace",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063z1bm8fvzkmd",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 33,
+      "date": "2025-11-02",
+      "notes": "Google Workspace",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "17715378540631cs94tl4bkuh",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 26,
+      "date": "2025-10-02",
+      "notes": "Google Workspace\t",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063t6g2puyeyx",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 26,
+      "date": "2025-09-02",
+      "notes": "Google Workspace",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063i581l8eqcrr",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 25.2,
+      "date": "2025-08-02",
+      "notes": "Google Workspace\t",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "177153785406352ch14jarj",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 25.2,
+      "date": "2025-07-01",
+      "notes": "Google Workspace\t",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063cq2bpkdrins",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 21,
+      "date": "2025-06-02",
+      "notes": "Google Workspace\t",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "17715378540631852zrdmd5r",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 33.6,
+      "date": "2026-01-02",
+      "notes": "Google Workspace",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063v4of2f449d",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 33.6,
+      "date": "2026-02-02",
+      "notes": "Google Workspace",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537854063hezk7cn70vb",
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 6.28,
+      "date": "2026-02-02",
+      "notes": "Server Cost",
+      "vendor": "G-Suite"
+    },
+    {
+      "id": "1771537855030j4p7k6b8s3",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 20,
+      "date": "2025-12-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855030v6p0kv0uoa",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 5,
+      "date": "2025-11-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "17715378550302obguc0bbek",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 5,
+      "date": "2025-10-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855030tq0xk6ikk2e",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 5,
+      "date": "2025-09-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "177153785503034bynx64kcc",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 4.73,
+      "date": "2025-08-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855030nk6jxswcu9",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 4.62,
+      "date": "2025-07-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855030kc2twdar41s",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 18.74,
+      "date": "2025-06-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855030d7cw896uatu",
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 36.28,
+      "date": "2026-01-02",
+      "notes": "Server Cost",
+      "vendor": "AWS"
+    },
+    {
+      "id": "1771537855820cxsvjt4ekl",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-12-15",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820gahvz80ow5q",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-11-15",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820inlvebcato",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-10-15",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820vyhry4fvask",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-09-15",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820glyynhe7utm",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-08-14",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820eynfx1wnbs",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-07-14",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820xuy7rk26uca",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2025-06-14",
+      "notes": "Docusign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "1771537855820i66a985wgon",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2026-01-14",
+      "notes": "DocuSign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "id": "177153785582042sqvcp9p6c",
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2026-02-14",
+      "notes": "DocuSign Membership",
+      "vendor": "Docusign"
+    },
+    {
+      "subscriptionId": "1772638245890vqkfhnmkuvm",
+      "amount": 12,
+      "date": "2026-03-04",
+      "notes": "",
+      "vendor": "GitHub Copilot",
+      "id": "1772638255748tjnihiwrmfj"
+    },
+    {
+      "subscriptionId": "1772638959055n988jqg7jcg",
+      "amount": 24,
+      "date": "2026-03-04",
+      "notes": "",
+      "vendor": "Buffer",
+      "id": "17726389729777v66hust3rk"
+    },
+    {
+      "subscriptionId": "1773064596680ek70p9m97va",
+      "amount": 100,
+      "date": "2026-03-09",
+      "notes": "",
+      "vendor": "Claude Code",
+      "id": "1773071571699ehw5seprxmt"
+    },
+    {
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 33.04,
+      "date": "2026-03-02",
+      "notes": "",
+      "vendor": "G-Suite",
+      "id": "177315792927721oz21ezl6t"
+    },
+    {
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 21.42,
+      "date": "2026-03-02",
+      "notes": "",
+      "vendor": "AWS",
+      "id": "17731579509924fqm52gvny"
+    },
+    {
+      "subscriptionId": "1774459722513jw6rd0a4jj",
+      "amount": 5,
+      "date": "2026-03-14",
+      "notes": "",
+      "vendor": "Notes Bot io",
+      "id": "1774459734302fxdmmau3n8s"
+    },
+    {
+      "subscriptionId": "1771537854063haqii0ou47",
+      "amount": 27.6,
+      "date": "2026-04-02",
+      "notes": "",
+      "vendor": "G-Suite",
+      "id": "177678475244085nt23b1x"
+    },
+    {
+      "subscriptionId": "177153785503054tsfue6o33",
+      "amount": 109.77,
+      "date": "2026-04-03",
+      "notes": "",
+      "vendor": "AWS",
+      "id": "1776784811476anojahswzl"
+    },
+    {
+      "subscriptionId": "1772638959055n988jqg7jcg",
+      "amount": 24,
+      "date": "2026-04-05",
+      "notes": "",
+      "vendor": "Buffer",
+      "id": "1776784885217xledy6i921"
+    },
+    {
+      "subscriptionId": "1772638245890vqkfhnmkuvm",
+      "amount": 12,
+      "date": "2026-04-06",
+      "notes": "",
+      "vendor": "Github Organization",
+      "id": "17767848951751dicht5m6vg"
+    },
+    {
+      "subscriptionId": "1771537855820h9e93n3khys",
+      "amount": 15,
+      "date": "2026-04-14",
+      "notes": "",
+      "vendor": "Docusign",
+      "id": "1776785179616i3ao49wht5g"
+    },
+    {
+      "subscriptionId": "1774459722513jw6rd0a4jj",
+      "amount": 5,
+      "date": "2026-04-14",
+      "notes": "",
+      "vendor": "Notes Bot io",
+      "id": "1776785190523td0fh8utyve"
+    },
+    {
+      "subscriptionId": "1773064596680ek70p9m97va",
+      "amount": 100,
+      "date": "2026-04-14",
+      "notes": "",
+      "vendor": "Claude Code",
+      "id": "17767851973319mhwo6gba9h"
+    }
+  ],
+  "taxRates": {
+    "federal": 22,
+    "state": 5.75,
+    "selfEmployment": 15.3
+  },
+  "mercurySavingsBalance": 1023
+}

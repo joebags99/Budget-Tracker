@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import { formatCurrency } from '../../utils/dateUtils.js';
+import { formatCurrency, parseDate } from '../../utils/dateUtils.js';
 import { EXPENSE_CATEGORIES } from '../../utils/irsMapping.js';
 import {
   ResponsiveContainer,
@@ -62,16 +62,15 @@ export default function Analytics() {
 
   // ── Revenue & Expenses by month ───────────────────────────────────────────
   const revenueExpenseData = useMemo(() => {
+    const charges = state.subscriptionCharges || [];
     return months.map(m => {
-      const rev = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
-        .reduce((s, p) => s + p.amount, 0);
-      const exp = state.expenses
-        .filter(e => { const d = new Date(e.date); return d.getFullYear() === m.year && d.getMonth() === m.month; })
-        .reduce((s, e) => s + e.amount, 0);
+      const inMonth = x => { const d = parseDate(x.date); return d.getFullYear() === m.year && d.getMonth() === m.month; };
+      const rev = state.payments.filter(inMonth).reduce((s, p) => s + p.amount, 0);
+      const exp = state.expenses.filter(inMonth).reduce((s, e) => s + e.amount, 0)
+                + charges.filter(inMonth).reduce((s, c) => s + c.amount, 0);
       return { month: m.label, Revenue: rev, Expenses: exp, 'Net Profit': rev - exp };
     });
-  }, [state.payments, state.expenses, months]);
+  }, [state.payments, state.expenses, state.subscriptionCharges, months]);
 
   // ── Expense breakdown by category ─────────────────────────────────────────
   const expensePieData = useMemo(() => {
@@ -79,13 +78,19 @@ export default function Analytics() {
     state.expenses.forEach(e => {
       totals[e.category] = (totals[e.category] || 0) + e.amount;
     });
+    // Roll subscription charges into their subscription's category
+    (state.subscriptionCharges || []).forEach(c => {
+      const sub = (state.subscriptions || []).find(s => String(s.id) === String(c.subscriptionId));
+      const cat = sub?.category || 'other';
+      totals[cat] = (totals[cat] || 0) + c.amount;
+    });
     return Object.entries(totals)
       .map(([cat, val]) => ({
         name: EXPENSE_CATEGORIES.find(c => c.value === cat)?.label || cat,
         value: val,
       }))
       .sort((a, b) => b.value - a.value);
-  }, [state.expenses]);
+  }, [state.expenses, state.subscriptionCharges, state.subscriptions]);
 
   // ── MRR trend — approximate from support plan history ────────────────────
   const mrrData = useMemo(() => {
@@ -108,10 +113,10 @@ export default function Analytics() {
   const revenueSplitData = useMemo(() => {
     return months.map(m => {
       const proj = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && (p.type === 'project' || !p.type); })
+        .filter(p => { const d = parseDate(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && (p.type === 'project' || !p.type); })
         .reduce((s, p) => s + p.amount, 0);
       const supp = state.payments
-        .filter(p => { const d = new Date(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && p.type === 'support'; })
+        .filter(p => { const d = parseDate(p.date); return d.getFullYear() === m.year && d.getMonth() === m.month && p.type === 'support'; })
         .reduce((s, p) => s + p.amount, 0);
       return { month: m.label, 'Project Revenue': proj, 'Support Revenue': supp };
     });

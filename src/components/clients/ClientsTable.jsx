@@ -1,6 +1,7 @@
 import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate } from '../../utils/dateUtils.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function ClientsTable({ clients, payments, supportPlans, onEdit, onView }) {
   const { dispatch } = useFinancial();
@@ -34,8 +35,7 @@ export default function ClientsTable({ clients, payments, supportPlans, onEdit, 
   }
 
   return (
-    <div className="card">
-      <h3>All Clients</h3>
+    <CollapsibleCard title="All Clients">
       {clients.length === 0 ? (
         <div className="empty-state">No clients yet — add one above.</div>
       ) : (
@@ -100,6 +100,6 @@ export default function ClientsTable({ clients, payments, supportPlans, onEdit, 
           </table>
         </div>
       )}
-    </div>
+    </CollapsibleCard>
   );
 }

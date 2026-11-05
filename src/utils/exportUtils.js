@@ -1,6 +1,7 @@
 import { IRS_TAX_LINE_MAP, getIRSMapping } from './irsMapping.js';
 import { MEMBERS } from './calculations.js';
 import { getProjectTypeLabel, getSupportPlanTypeLabel } from './calculations.js';
+import { parseDate } from './dateUtils.js';
 
 // ── Generic CSV helpers ────────────────────────────────────────────────────────
 
@@ -110,9 +111,9 @@ export function exportTaxCSV({ year, payments, expenses, taxPayments, sections }
   const yearStart = new Date(year, 0, 1);
   const yearEnd   = new Date(year, 11, 31, 23, 59, 59, 999);
 
-  const yearPayments    = payments.filter(p  => { const d = new Date(p.date);  return d >= yearStart && d <= yearEnd; });
-  const yearExpenses    = expenses.filter(e  => { const d = new Date(e.date);  return d >= yearStart && d <= yearEnd; });
-  const yearTaxPayments = taxPayments.filter(t => { const d = new Date(t.date); return d >= yearStart && d <= yearEnd; });
+  const yearPayments    = payments.filter(p  => { const d = parseDate(p.date);  return d >= yearStart && d <= yearEnd; });
+  const yearExpenses    = expenses.filter(e  => { const d = parseDate(e.date);  return d >= yearStart && d <= yearEnd; });
+  const yearTaxPayments = taxPayments.filter(t => { const d = parseDate(t.date); return d >= yearStart && d <= yearEnd; });
 
   // Revenue
   const projectRevenue = yearPayments.filter(p => p.type === 'project' || !p.type).reduce((s, p) => s + p.amount, 0);
