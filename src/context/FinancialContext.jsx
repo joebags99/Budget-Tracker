@@ -13,13 +13,49 @@ const initialState = {
   taxPayments: [],
   supportPlans: [],
   clients: [],
+  subscriptions: [],
+  subscriptionCharges: [],
   taxRates: { ...DEFAULT_TAX_RATES },
+  mercurySavingsBalance: 0,
 };
 
 function migrateExpenses(expenses) {
   return expenses.map(e => ({
     ...e,
     irsLine: e.irsLine || getIRSLine(e.category),
+  }));
+}
+
+// Old app used Date.now() (number) as IDs. Normalize to strings so strict
+// equality comparisons work correctly after HTML select coerces values to strings.
+function migrateIds(items) {
+  return (items || []).map(item => ({ ...item, id: String(item.id) }));
+}
+
+// Auto-detect which historical CCC Legacy payments should use the old ownership splits.
+// Rules: first 2 project payments (by date) + first support payment per supportPlanId.
+// Payments that already have useLegacySplit set are left untouched.
+function migrateLegacySplits(payments) {
+  const needsMigration = payments.some(p => p.useLegacySplit === undefined);
+  if (!needsMigration) return payments;
+
+  const sorted = [...payments].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const cccProject = sorted.filter(p => p.clientName === 'CCC Legacy' && (p.type === 'project' || !p.type));
+  const cccSupport = sorted.filter(p => p.clientName === 'CCC Legacy' && p.type === 'support');
+
+  const legacyIds = new Set();
+  cccProject.slice(0, 2).forEach(p => legacyIds.add(p.id));
+  const seenPlans = new Set();
+  cccSupport.forEach(p => {
+    if (p.supportPlanId && !seenPlans.has(p.supportPlanId)) {
+      seenPlans.add(p.supportPlanId);
+      legacyIds.add(p.id);
+    }
+  });
+
+  return payments.map(p => ({
+    ...p,
+    useLegacySplit: p.useLegacySplit !== undefined ? p.useLegacySplit : legacyIds.has(p.id),
   }));
 }
 
@@ -74,19 +110,66 @@ function reducer(state, action) {
     case 'DELETE_CLIENT':
       return { ...state, clients: state.clients.filter(c => c.id !== action.payload) };
 
+    case 'ADD_SUBSCRIPTION':
+      return { ...state, subscriptions: [...state.subscriptions, { ...action.payload, id: generateId() }] };
+    case 'UPDATE_SUBSCRIPTION':
+      return { ...state, subscriptions: state.subscriptions.map(s => s.id === action.payload.id ? action.payload : s) };
+    case 'DELETE_SUBSCRIPTION':
+      return {
+        ...state,
+        subscriptions: state.subscriptions.filter(s => s.id !== action.payload),
+        subscriptionCharges: state.subscriptionCharges.filter(c => c.subscriptionId !== action.payload),
+      };
+    case 'RECORD_SUBSCRIPTION_CHARGE':
+      return { ...state, subscriptionCharges: [...state.subscriptionCharges, { ...action.payload, id: generateId() }] };
+    case 'DELETE_SUBSCRIPTION_CHARGE':
+      return { ...state, subscriptionCharges: state.subscriptionCharges.filter(c => c.id !== action.payload) };
+
+    case 'MIGRATE_TO_SUBSCRIPTION': {
+      // Atomically: create subscription, convert each expense entry into a charge,
+      // and flip those expenses to recurring:'no' so they don't double-count.
+      const { vendor, category, notes, expenses: toMigrate } = action.payload;
+      const subId = generateId();
+      const newSub = { id: subId, vendor, category, notes: notes || '' };
+      const newCharges = toMigrate.map(e => ({
+        id: generateId(),
+        subscriptionId: subId,
+        amount: e.amount,
+        date: e.date,
+        notes: e.description,
+        vendor,
+      }));
+      const migratedIds = new Set(toMigrate.map(e => e.id));
+      const updatedExpenses = state.expenses.map(e =>
+        migratedIds.has(e.id) ? { ...e, recurring: 'no' } : e
+      );
+      return {
+        ...state,
+        subscriptions: [...state.subscriptions, newSub],
+        subscriptionCharges: [...state.subscriptionCharges, ...newCharges],
+        expenses: updatedExpenses,
+      };
+    }
+
     case 'UPDATE_TAX_RATES':
       return { ...state, taxRates: { ...state.taxRates, ...action.payload } };
+
+    case 'SET_MERCURY_BALANCE':
+      return { ...state, mercurySavingsBalance: action.payload };
 
     case 'IMPORT_ALL': {
       const imported = action.payload;
       return {
-        projects:     imported.projects     || [],
-        expenses:     migrateExpenses(imported.expenses || []),
-        payments:     imported.payments     || [],
-        taxPayments:  imported.taxPayments  || [],
-        supportPlans: imported.supportPlans || [],
-        clients:      imported.clients      || [],
-        taxRates:     imported.taxRates     || { ...DEFAULT_TAX_RATES },
+        projects:            migrateIds(imported.projects),
+        expenses:            migrateExpenses(imported.expenses || []),
+        payments:            migrateLegacySplits(migrateIds(imported.payments)),
+        taxPayments:         migrateIds(imported.taxPayments),
+        supportPlans:        migrateIds(imported.supportPlans),
+        clients:             migrateIds(imported.clients),
+        subscriptions:       migrateIds(imported.subscriptions),
+        subscriptionCharges: migrateIds(imported.subscriptionCharges),
+        taxRates:            imported.taxRates || { ...DEFAULT_TAX_RATES },
+        mercurySavingsBalance: imported.mercurySavingsBalance ?? 0,
       };
     }
 
@@ -119,13 +202,16 @@ export function FinancialProvider({ children }) {
       if (saved) {
         const data = JSON.parse(saved);
         return {
-          projects:     data.projects     || [],
-          expenses:     migrateExpenses(data.expenses || []),
-          payments:     data.payments     || [],
-          taxPayments:  data.taxPayments  || [],
-          supportPlans: data.supportPlans || [],
-          clients:      data.clients      || [],
-          taxRates:     data.taxRates     || { ...DEFAULT_TAX_RATES },
+          projects:            migrateIds(data.projects),
+          expenses:            migrateExpenses(data.expenses || []),
+          payments:            migrateLegacySplits(migrateIds(data.payments)),
+          taxPayments:         migrateIds(data.taxPayments),
+          supportPlans:        migrateIds(data.supportPlans),
+          clients:             migrateIds(data.clients),
+          subscriptions:       migrateIds(data.subscriptions),
+          subscriptionCharges: migrateIds(data.subscriptionCharges),
+          taxRates:            data.taxRates || { ...DEFAULT_TAX_RATES },
+          mercurySavingsBalance: data.mercurySavingsBalance ?? 0,
         };
       }
     } catch {}

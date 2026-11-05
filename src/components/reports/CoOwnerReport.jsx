@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
-import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcMRR, MEMBERS } from '../../utils/calculations.js';
+import { calcRevenue, calcExpenses, calcDistributions, calcTax, calcMRR, MEMBERS, CCC_LEGACY_CLIENT } from '../../utils/calculations.js';
 import { getQuickDateRange, toDateString, formatCurrency } from '../../utils/dateUtils.js';
 
 const PERIOD_PRESETS = [
@@ -37,9 +37,16 @@ export default function CoOwnerReport() {
   function generate() {
     const { from, to } = getRange();
     const rev  = calcRevenue(state.payments,  from, to);
-    const exp  = calcExpenses(state.expenses, from, to);
+    const exp  = calcExpenses(state.expenses, from, to, state.subscriptionCharges || []);
     const net  = rev.total - exp.total;
-    const dist = calcDistributions(net);
+    const cccLegacyRevenue = rev.filtered
+      .filter(p => p.useLegacySplit === true)
+      .reduce((s, p) => s + p.amount, 0);
+    const dist = calcDistributions(net, {
+      cccLegacyRevenue,
+      mercuryBalance: state.mercurySavingsBalance || 0,
+      periodEndDate: period === 'custom' ? custom.to : toDateString(getRange().to),
+    });
     const tax  = calcTax(net, TAX_RATES.federal, TAX_RATES.state, TAX_RATES.selfEmployment);
     const mrr  = calcMRR(state.supportPlans);
 
@@ -47,9 +54,12 @@ export default function CoOwnerReport() {
     const byClient = {};
     rev.filtered.forEach(p => { byClient[p.clientName] = (byClient[p.clientName] || 0) + p.amount; });
 
-    // Expenses by category
+    // Expenses by category (resolve subscription charges via their parent subscription)
     const byCategory = {};
-    exp.filtered.forEach(e => { byCategory[e.category] = (byCategory[e.category] || 0) + e.amount; });
+    exp.filtered.forEach(e => {
+      const cat = e.category || (state.subscriptions || []).find(s => String(s.id) === String(e.subscriptionId))?.category || 'other';
+      byCategory[cat] = (byCategory[cat] || 0) + e.amount;
+    });
 
     const periodLabel = PERIOD_PRESETS.find(p => p.id === period)?.label || 'Custom Range';
     setReport({ rev, exp, net, dist, tax, mrr, byClient, byCategory, periodLabel, generatedAt: new Date() });
@@ -125,7 +135,7 @@ export default function CoOwnerReport() {
 
           {/* Member Distributions */}
           <div style={{ background: 'white', padding: 20, marginBottom: 18, borderRadius: 8, boxShadow: '0 1px 6px rgba(0,0,0,0.07)', borderLeft: '4px solid #A678D1' }}>
-            <h3 style={{ color: '#A678D1', marginBottom: 16 }}>Member Distributions (40% of Net Profit)</h3>
+            <h3 style={{ color: '#A678D1', marginBottom: 16 }}>Member Distributions (90% of Net Profit)</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12 }}>
               {report.dist.memberAmounts.map((m, i) => (
                 <div key={m.id} style={{ background: GRADIENTS[i % GRADIENTS.length], color: 'white', padding: 16, borderRadius: 8, textAlign: 'center' }}>
@@ -136,8 +146,8 @@ export default function CoOwnerReport() {
               ))}
             </div>
             <div style={{ marginTop: 12, padding: '10px 14px', background: '#f8f9fa', borderRadius: 6, display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-              <span>Business Reserve (60%)</span>
-              <strong style={{ color: '#A678D1' }}>{formatCurrency(report.dist.reserve)}</strong>
+              <span>Retained Savings (10%)</span>
+              <strong style={{ color: '#A678D1' }}>{formatCurrency(report.dist.savings)}</strong>
             </div>
           </div>
 

@@ -1,0 +1,383 @@
+{
+  "projects": [
+    {
+      "id": 1758127423746,
+      "clientName": "Heroes Journey",
+      "projectType": "custom",
+      "totalAmount": 1,
+      "startDate": "2025-07-01",
+      "paymentSchedule": "full",
+      "status": "completed",
+      "paidAmount": 1
+    },
+    {
+      "id": 1758127882447,
+      "clientName": "Mount Herritage Bar & Grill",
+      "projectType": "custom",
+      "totalAmount": 1,
+      "startDate": "2025-06-27",
+      "paymentSchedule": "full",
+      "status": "completed",
+      "paidAmount": 1
+    },
+    {
+      "id": 1758128043081,
+      "clientName": "Radical Movers",
+      "projectType": "custom",
+      "totalAmount": 1300,
+      "startDate": "2025-06-03",
+      "paymentSchedule": "2payments",
+      "status": "active",
+      "paidAmount": 650
+    },
+    {
+      "id": 1758128133743,
+      "clientName": "Liberty Kabob",
+      "projectType": "basic",
+      "totalAmount": 750,
+      "startDate": "2025-07-25",
+      "paymentSchedule": "2payments",
+      "status": "completed",
+      "paidAmount": 375
+    },
+    {
+      "id": 1758128229817,
+      "clientName": "Poppy's Dust",
+      "projectType": "custom",
+      "totalAmount": 3500,
+      "startDate": "2025-09-10",
+      "paymentSchedule": "2payments",
+      "status": "active",
+      "paidAmount": 1750
+    },
+    {
+      "id": 1758128273870,
+      "clientName": "Little Cheese LLC",
+      "projectType": "custom",
+      "totalAmount": 1500,
+      "startDate": "2025-09-15",
+      "paymentSchedule": "3payments",
+      "status": "active",
+      "paidAmount": 750
+    }
+  ],
+  "expenses": [
+    {
+      "id": 1758128986273,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-09-15",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758126387137,
+      "description": "Google Workspace",
+      "amount": 26,
+      "date": "2025-09-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758126448838,
+      "description": "Server Cost",
+      "amount": 5,
+      "date": "2025-09-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129645707,
+      "description": "Paid Joe for Photoshop Skills",
+      "amount": 30,
+      "date": "2025-09-01",
+      "category": "professional",
+      "vendor": "Joseph Konkle",
+      "recurring": "no"
+    },
+    {
+      "id": 1758128972133,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-08-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758126559649,
+      "description": "Posters for Event",
+      "amount": 43.15,
+      "date": "2025-08-03",
+      "category": "marketing",
+      "vendor": "Staples Warehouse",
+      "recurring": "no"
+    },
+    {
+      "id": 1758129094397,
+      "description": "Google Workspace\t",
+      "amount": 25.2,
+      "date": "2025-08-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129189102,
+      "description": "Server Cost",
+      "amount": 4.73,
+      "date": "2025-08-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758126608109,
+      "description": "Chamber of Commerce Membership Fee",
+      "amount": 100,
+      "date": "2025-07-29",
+      "category": "other",
+      "vendor": "Shenandoah County",
+      "recurring": "no"
+    },
+    {
+      "id": 1758128956848,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-07-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129170501,
+      "description": "Server Cost",
+      "amount": 4.62,
+      "date": "2025-07-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129068546,
+      "description": "Google Workspace\t",
+      "amount": 25.2,
+      "date": "2025-07-01",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758128899778,
+      "description": "Docusign Membership",
+      "amount": 15,
+      "date": "2025-06-14",
+      "category": "software",
+      "vendor": "Docusign",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129049023,
+      "description": "Google Workspace\t",
+      "amount": 21,
+      "date": "2025-06-02",
+      "category": "software",
+      "vendor": "G-Suite",
+      "recurring": "monthly"
+    },
+    {
+      "id": 1758129145606,
+      "description": "Server Cost",
+      "amount": 18.74,
+      "date": "2025-06-02",
+      "category": "software",
+      "vendor": "AWS",
+      "recurring": "monthly"
+    }
+  ],
+  "payments": [
+    {
+      "id": 1758127439177,
+      "projectId": 1758127423746,
+      "amount": 1,
+      "date": "2025-07-01",
+      "clientName": "Heroes Journey",
+      "type": "project"
+    },
+    {
+      "id": 1758127551006,
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-05-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-05"
+    },
+    {
+      "id": 1758127566288,
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-06-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-06"
+    },
+    {
+      "id": 1758127580679,
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-07-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-07"
+    },
+    {
+      "id": 1758127593043,
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-08-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-08"
+    },
+    {
+      "id": 1758127602450,
+      "supportPlanId": 1758127522240,
+      "amount": 20,
+      "date": "2025-09-16",
+      "clientName": "Heroes Journey",
+      "type": "support",
+      "paymentMonth": "2025-09"
+    },
+    {
+      "id": 1758127893859,
+      "projectId": 1758127882447,
+      "amount": 1,
+      "date": "2025-06-27",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "project"
+    },
+    {
+      "id": 1758127955882,
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-07-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-07"
+    },
+    {
+      "id": 1758127971599,
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-08-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-08"
+    },
+    {
+      "id": 1758127979717,
+      "supportPlanId": 1758127937612,
+      "amount": 50,
+      "date": "2025-09-01",
+      "clientName": "Mount Herritage Bar & Grill",
+      "type": "support",
+      "paymentMonth": "2025-09"
+    },
+    {
+      "id": 1758128084062,
+      "projectId": 1758128043081,
+      "amount": 650,
+      "date": "2025-08-05",
+      "clientName": "Radical Movers",
+      "type": "project"
+    },
+    {
+      "id": 1758128163216,
+      "projectId": 1758128133743,
+      "amount": 375,
+      "date": "2025-07-25",
+      "clientName": "Liberty Kabob",
+      "type": "project"
+    },
+    {
+      "id": 1758128308644,
+      "projectId": 1758128229817,
+      "amount": 1750,
+      "date": "2025-09-15",
+      "clientName": "Poppy's Dust",
+      "type": "project"
+    },
+    {
+      "id": 1758128334051,
+      "projectId": 1758128273870,
+      "amount": 750,
+      "date": "2025-09-15",
+      "clientName": "Little Cheese LLC",
+      "type": "project"
+    }
+  ],
+  "taxPayments": [],
+  "supportPlans": [
+    {
+      "id": 1758127522240,
+      "clientName": "Heroes Journey",
+      "planType": "custom",
+      "monthlyAmount": 20,
+      "startDate": "2025-05-16",
+      "billingDay": 16,
+      "status": "active",
+      "services": "Hosting & SSL certificate, Core/plugin updates, Basic security monitoring",
+      "endDate": ""
+    },
+    {
+      "id": 1758127937612,
+      "clientName": "Mount Herritage Bar & Grill",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-07-01",
+      "billingDay": 1,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": 1758128489755,
+      "clientName": "Little Cheese LLC",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-11-01",
+      "billingDay": 1,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": 1758128522489,
+      "clientName": "Poppy's Dust",
+      "planType": "basic",
+      "monthlyAmount": 50,
+      "startDate": "2025-10-31",
+      "billingDay": 31,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    },
+    {
+      "id": 1758128747005,
+      "clientName": "Radical Movers",
+      "planType": "custom",
+      "monthlyAmount": 25,
+      "startDate": "2025-10-15",
+      "billingDay": 15,
+      "status": "active",
+      "services": "",
+      "endDate": ""
+    }
+  ],
+  "exportDate": "2025-09-17T17:21:09.708Z",
+  "version": "1.0"
+}

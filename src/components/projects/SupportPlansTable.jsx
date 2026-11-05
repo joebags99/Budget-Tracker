@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate, today } from '../../utils/dateUtils.js';
+import { CCC_LEGACY_CLIENT } from '../../utils/calculations.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
   const { dispatch } = useFinancial();
   const showToast = useAppToast();
-  const [payForm, setPayForm] = useState({ planId: '', clientName: '', amount: '', date: today(), notes: '' });
+  const [payForm, setPayForm] = useState({ planId: '', clientName: '', amount: '', date: today(), notes: '', useLegacySplit: false });
 
   function handleDelete(id) {
     if (!confirm('Delete this support plan?')) return;
@@ -16,7 +18,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
 
   function handlePaySubmit(e) {
     e.preventDefault();
-    const plan = supportPlans.find(p => p.id === payForm.planId);
+    const plan = supportPlans.find(p => String(p.id) === String(payForm.planId));
     if (!plan || !payForm.amount || !payForm.date) {
       showToast('Select a plan and enter payment details.', 'error');
       return;
@@ -30,11 +32,12 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
           date: payForm.date,
           notes: payForm.notes,
           supportPlanId: plan.id,
+          useLegacySplit: payForm.useLegacySplit,
         },
       },
     });
     showToast('Support payment recorded.', 'success');
-    setPayForm({ planId: '', clientName: '', amount: '', date: today(), notes: '' });
+    setPayForm({ planId: '', clientName: '', amount: '', date: today(), notes: '', useLegacySplit: false });
   }
 
   const statusBadge = s => {
@@ -44,8 +47,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
 
   return (
     <>
-      <div className="card">
-        <h3>Support Plans</h3>
+      <CollapsibleCard title="Support Plans">
         <div className="table-wrap">
           <table>
             <thead>
@@ -77,7 +79,7 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
             </tbody>
           </table>
         </div>
-      </div>
+      </CollapsibleCard>
 
       <div className="card">
         <h3>Record Support Payment</h3>
@@ -105,6 +107,18 @@ export default function SupportPlansTable({ supportPlans, onEdit, clients }) {
               <input type="text" value={payForm.notes} onChange={e => setPayForm(f => ({ ...f, notes: e.target.value }))} placeholder="Optional notes" />
             </div>
           </div>
+          {supportPlans.find(p => String(p.id) === String(payForm.planId))?.clientName === CCC_LEGACY_CLIENT && (
+            <div style={{ padding: '10px 14px', background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 6, marginBottom: 12 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.9rem' }}>
+                <input
+                  type="checkbox"
+                  checked={payForm.useLegacySplit}
+                  onChange={e => setPayForm(f => ({ ...f, useLegacySplit: e.target.checked }))}
+                />
+                Use legacy ownership split (Jon 35%, Alejandro 33%, Joe 32%) — for first subscription payment only
+              </label>
+            </div>
+          )}
           <div className="form-actions">
             <button type="submit" className="btn">Record Payment</button>
           </div>

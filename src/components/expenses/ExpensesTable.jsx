@@ -2,6 +2,7 @@ import { useFinancial } from '../../context/FinancialContext.jsx';
 import { useAppToast } from '../../App.jsx';
 import { formatCurrency, formatDate } from '../../utils/dateUtils.js';
 import { EXPENSE_CATEGORIES } from '../../utils/irsMapping.js';
+import CollapsibleCard from '../layout/CollapsibleCard.jsx';
 
 const recurringLabel = { no: 'One-time', monthly: 'Monthly', quarterly: 'Quarterly', annually: 'Annually' };
 
@@ -20,8 +21,7 @@ export default function ExpensesTable({ expenses, onEdit }) {
   const catLabel = v => EXPENSE_CATEGORIES.find(c => c.value === v)?.label || v;
 
   return (
-    <div className="card">
-      <h3>Expenses Summary</h3>
+    <CollapsibleCard title="Expenses Summary">
       <div className="table-wrap">
         <table>
           <thead>
@@ -58,6 +58,6 @@ export default function ExpensesTable({ expenses, onEdit }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </CollapsibleCard>
   );
 }
